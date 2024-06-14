@@ -1,5 +1,4 @@
 from django import forms
-from datetimewidget import widgets
 from . import models
 
 
