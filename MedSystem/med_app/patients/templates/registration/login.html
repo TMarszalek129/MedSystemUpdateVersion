@@ -1,0 +1,18 @@
+{% extends "master.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h2>Log In</h2>
+<form method="POST">
+    {% csrf_token %}
+
+    <label for="login">Login:</label><br>
+    <input type="text" id="login" name="login"><br>
+    <label for="pwd">Password:</label><br>
+    <input type="password" id="pwd" name="pwd">
+
+    <input type="submit" value="Log in">
+</form>
+<p><a href="/">HOME</a></p>
+{% endblock %}

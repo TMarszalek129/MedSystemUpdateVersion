@@ -1,0 +1,16 @@
+{% extends "master.html" %}
+{% block title %}
+  {{ pt.firstname }} {{ pt.lastname }}
+{% endblock %}
+{% block content %}
+
+    <h1>{{ pt.firstname }} {{ pt.lastname }}</h1>
+    <p>Login: {{ pt.login }}</p>
+
+    <p>Data of birth: {{ pt.birthdate }}</p>
+    <p>You are a {{pt.sex}}</p>
+    <p>You have {{age}} years</p>
+    <p><a class="btn btn-primary "  href="./{{pt.id}}/exams" >Check your examinations <i class="bi bi-list-check"></i></i></a></p>
+    <p><a class="btn btn-primary "  href="./{{pt.id}}/new_measurement" >Add measurement <i class="bi bi-plus-square"></i></a></p>
+    <p>Back to <a href="/patients">Patients</a></p>
+{% endblock %}

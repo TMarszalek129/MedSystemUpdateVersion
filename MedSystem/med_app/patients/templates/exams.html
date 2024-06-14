@@ -1,0 +1,82 @@
+{% extends 'master.html' %}
+
+{% block table %}
+b{
+    color: red
+}
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    }
+
+    td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2;}
+
+    tr:hover {background-color: #ddd;}
+
+    th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: red;
+    color: white;
+    }
+{% endblock %}
+
+{% block title %}
+My examinations
+{% endblock %}
+
+{% block content %}
+<h1>Hello {{fname}} {{lname}}!</h1>
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+<hr>
+<h2>Your status: </h2>
+<p>Your birthday: {{birthday}}</p>
+<p>You have <b>{{age}}</b> years</p>
+<p>You are a <b>{{sex}}</b></p>
+<p>{{entry}}<b>{{bmi}}</b>{{com}}</p>
+<hr>
+<h2>Your summary: </h2>
+{% if pulse %}
+<p>Your average pulse value from a week ago is: {{pulse.0}} (minimum: {{pulse.2}}, maximum: {{pulse.1}})</p>
+{% endif %}
+<p><b>{{pcom}}</b></p>
+
+{% if sys %}
+<p>Your average systonic heart pressure value from a week ago is: {{sys.0}} (minimum: {{sys.2}}, maximum: {{sys.1}})</p>
+{% endif %}
+<p><b>{{scom}}</b></p>
+
+{% if diast %}
+<p>Your average diastonic heart pressure value from a week ago is: {{diast.0}} (minimum: {{diast.2}}, maximum: {{diast.1}})</p>
+{% endif %}
+<p><b>{{dcom}}</b></p>
+<p>{{sys_check}}</p>
+<hr>
+<table style="width:100%">
+  <tr>
+    <th>Measure</th>
+    <th>Value A</th>
+    <th>Value B</th>
+    <th>Unit</th>
+    <th>Timestamp</th>
+  </tr>
+  {% for meas in m %}
+  <tr>
+    <td>{{meas.measure}}</td>
+    <td>{{meas.value_a}}</td>
+    <td>{{meas.value_b}}</td>
+    <td>{{meas.unit}}</td>
+    <td>{{meas.timestamp}}</td>
+  {% endfor %}
+  </tr>
+
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "master.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2>Log In</h2>
+    <form method="POST">
+    {% csrf_token %}
+        {% if not f.is_valid %}
+        <ul>
+        {% for pole, bledy in f.errors.items %}
+        	<li>{{ pole }}: {% for blad in bledy %}
+        		{{ blad }}
+        	{% endfor %}
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% endif %}
+
+        <table>
+            {{ f.as_table }}
+        </table>
+    <input type="submit" value="Log in"><br><br>
+    </form>
+    <a href="signup/">Create new account</a><br>
+    <a href="change_pass/">Change actual password</a>
+
+<p>Check current <a href="/patients">patients</a></p>
+{% endblock %}

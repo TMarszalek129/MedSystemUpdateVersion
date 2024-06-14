@@ -1,0 +1,30 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Sign up
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {% if not f.is_valid %}
+        <ul>
+        {% for pole, bledy in f.errors.items %}
+        	<li>{{ pole }}: {% for blad in bledy %}
+        		{{ blad }}
+        	{% endfor %}
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% endif %}
+
+<table>
+    {{ f.as_table }}
+</table>
+
+<input type="submit" value="Sign up">
+</form>
+<p><a href="/">HOME</a></p>
+{% endblock %}
