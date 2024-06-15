@@ -5,11 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/MedSystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MedSystem.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/77e98141-3953-4aa9-9b80-0128bb810584.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/77e98141-3953-4aa9-9b80-0128bb810584.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -101,21 +96,11 @@
       <workItem from="1718299107034" duration="4810000" />
       <workItem from="1718395327896" duration="100000" />
       <workItem from="1718395448863" duration="1357000" />
-      <workItem from="1718444707261" duration="5695000" />
+      <workItem from="1718444707261" duration="7922000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/MedSystem/med_app/patients/views.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

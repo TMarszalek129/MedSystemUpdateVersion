@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
 from django.views.generic import CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -269,7 +270,20 @@ def new_measure(request, id):
 
     return render(request, "new_measure.html", {"f": form, "id": id})
 
+def edit_measure(request, id):
+    patient = get_object_or_404(models.Patient, pk=id)
 
+    if request.method == 'POST':
+        form = forms.EditMeasureUnitForm(request.POST, patient_id=patient.id)
+        if form.is_valid():
+            form.save(commit=False)
+            form.patient_id = models.Patient.objects.get(id=id)
+            form.save()
+            return redirect('/patients/details/' + str(id))
+    else:
+        form = forms.EditMeasureUnitForm(patient_id=patient.id)
+
+    return render(request, 'edit_measure_form.html', {'form': form, "id": id})
 
 def testing(request):
     mydata = models.Patient.objects.all().values()

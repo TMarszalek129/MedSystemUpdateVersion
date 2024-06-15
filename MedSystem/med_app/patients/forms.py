@@ -102,3 +102,52 @@ class MeasureUnitForm(forms.Form):
         if commit:
             measure.save()
         return measure
+
+
+class EditMeasureUnitForm(forms.Form):
+    measure = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure to Edit")
+    measure_name = forms.CharField(max_length=128, label="New Measure Name")
+    unit_name = forms.CharField(max_length=10, label="New Unit Name")
+
+    def __init__(self, *args, **kwargs):
+        self.patient_id = kwargs.pop('patient_id', None)
+        super().__init__(*args, **kwargs)
+
+        if self.patient_id is not None:
+            # Filtrowanie badań przypisanych do konkretnego pacjenta
+            self.fields['measure'].queryset = models.Measure.objects.filter(patient_id=self.patient_id)
+
+        if self.data.get('measure'):
+            measure = models.Measure.objects.get(pk=self.data['measure'])
+            self.fields['measure_name'].initial = measure.measure_name
+            self.fields['unit_name'].initial = measure.unit_id.unit_name
+
+    def clean_measure_name(self):
+        measure_name = self.cleaned_data['measure_name']
+        measure_id = self.cleaned_data.get('measure').id
+
+        # Sprawdzenie, czy nazwa measure już istnieje dla danego pacjenta, pomijając bieżący rekord
+        if models.Measure.objects.filter(measure_name=measure_name, patient_id=self.patient_id).exclude(
+                id=measure_id).exists():
+            raise forms.ValidationError("Measure with this name already exists for this patient.")
+
+        return measure_name
+
+    def save(self, commit=True):
+        measure = self.cleaned_data['measure']
+
+        # Aktualizacja pola measure_name
+        measure.measure_name = self.cleaned_data['measure_name']
+
+        # Pobranie lub utworzenie jednostki
+        unit, created = models.Unit.objects.get_or_create(
+            unit_name=self.cleaned_data['unit_name'],
+            patient_id_id=self.patient_id
+        )
+
+        # Aktualizacja pola unit_id
+        measure.unit_id = unit
+
+        if commit:
+            measure.save()
+        return measure

@@ -1,0 +1,29 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Edit Tests
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+        {% csrf_token %}
+        {% if not form.is_valid %}
+            <ul>
+            {% for pole, bledy in form.errors.items %}
+                <li>{{ pole }}: {% for blad in bledy %}
+                    {{ blad }}
+                {% endfor %}
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <input type="submit" value="Update measurement">
+    </form>
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}
