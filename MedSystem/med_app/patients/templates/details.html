@@ -5,6 +5,7 @@
 {% block content %}
 
     <h1>{{ pt.firstname }} {{ pt.lastname }}</h1>
+    <img src="{{pt.image.url}}" alt="Your photo here" width="150" height="200">
     <p>Login: {{ pt.login }}</p>
 
     <p>Data of birth: {{ pt.birthdate }}</p>
