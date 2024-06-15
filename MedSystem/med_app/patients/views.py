@@ -255,16 +255,12 @@ def exams(request, id):
     return HttpResponse(template.render(context, request))
 def new_measurement(request, id):
     if request.method == 'GET':
-        form = forms.FormMeasurement()
-
-        form.measure_id = models.Measure.objects.filter(id=2) or models.Measure.objects.filter(id=0)
-        form.save(commit=False)
+        form = forms.FormMeasurement(patient_id=id)
     else:
-        form = forms.FormMeasurement(request.POST)
+        form = forms.FormMeasurement(request.POST,patient_id=id)
 
         if form.is_valid():
             measurement = form.save(commit=False)
-            #measurement.measure_id = models.Measure.objects.filter(id=id) | models.Measure.objects.filter(id=0)
             measurement.patient_id = models.Patient.objects.get(id=id)
             measurement.save()
             return redirect('/patients/details/' + str(id))

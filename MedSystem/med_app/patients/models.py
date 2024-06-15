@@ -30,10 +30,13 @@ class Measure(models.Model):
         return f"{self.measure_name}"
 class Measurement(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.PROTECT)
-    measure_id = models.ForeignKey(Measure, on_delete=models.PROTECT, )
+    measure_id = models.ForeignKey(Measure, on_delete=models.PROTECT)
     value_a = models.IntegerField()
     value_b = models.IntegerField(null=True, default=0)
     timestamp = models.DateTimeField(default=datetime.datetime.now(), editable=True,)
+
+    def __str__(self):
+        return f"Measurement for {self.patient_id} - {self.measure_id}"
 
 
 
