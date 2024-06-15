@@ -40,7 +40,9 @@ My examinations
 <p>Your birthday: {{birthday}}</p>
 <p>You have <b>{{age}}</b> years</p>
 <p>You are a <b>{{sex}}</b></p>
+{% if bmi %}
 <p>{{entry}}<b>{{bmi}}</b>{{com}}</p>
+{% endif %}
 <hr>
 <h2>Your summary: </h2>
 {% if pulse %}
