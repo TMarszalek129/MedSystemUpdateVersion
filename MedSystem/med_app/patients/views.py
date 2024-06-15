@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 import datetime
 import numpy as np
 from . import models, forms
+from django.http import Http404
 
 def main(request):
 
@@ -261,6 +262,23 @@ def new_measurement(request, id):
             return redirect('/patients/details/' + str(id))
 
     return render(request, "new_measurement.html", {"f": form, "id": id})
+
+def new_measure(request, id):
+    try:
+        patient = models.Patient.objects.get(pk=id)
+    except models.Patient.DoesNotExist:
+        raise Http404("Patient does not exist")
+    if request.method == 'POST':
+        form = forms.MeasureUnitForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            form.patient_id = models.Patient.objects.get(id=id)
+            form.save()
+            return redirect('/patients/details/' + str(id))
+    else:
+        form = forms.MeasureUnitForm(initial={'patient_id': patient.id})
+
+    return render(request, "new_measure.html", {"f": form, "id": id})
 
 
 
