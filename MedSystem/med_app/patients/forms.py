@@ -13,6 +13,10 @@ class FormChangePassword(forms.Form):
     oldpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='Old Password')
     newpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='New Password')
 
+class FormDelMeasurement(forms.Form):
+    patient_id = forms.HiddenInput()
+    entry_id = forms.HiddenInput()
+
 class FormPatient(forms.ModelForm):
 
     """
@@ -28,41 +32,20 @@ class FormPatient(forms.ModelForm):
         widgets = {'birthdate' : forms.SelectDateWidget(years=YEARS),
                    'password' : forms.PasswordInput
                    }
-
 class FormMeasurement(forms.ModelForm):
+
+
 
 
     class Meta:
         model = models.Measurement
         fields = '__all__'
         widgets = {'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
-                   'patient_id': forms.HiddenInput(attrs={'value': 0})}
+                   'patient_id': forms.HiddenInput(attrs={'value': 0}),
+                   'measure_id' : forms.MultipleChoiceField(choices=choices)
+                   }
 
     field_order = ['measure_id', 'value_a', 'value_b', 'timestamp']
-"""
-class MeasureUnitForm(forms.Form):
-    measure_name = forms.CharField(max_length=128)
-    unit_name = forms.CharField(max_length=10)
-    patient_id = forms.IntegerField(widget=forms.HiddenInput(attrs={'value': 0}))
-
-    def save(self, commit=True):
-        unit, created = models.Unit.objects.get_or_create(
-            unit_name=self.cleaned_data['unit_name'],
-            defaults={'patient_id_id': self.cleaned_data['patient_id']}
-        )
-
-        measure = models.Measure(
-            measure_name=self.cleaned_data['measure_name'],
-            unit_id=unit,
-            patient_id_id=self.cleaned_data['patient_id']
-        )
-
-        if commit:
-            measure.save()
-        return measure
-"""
-
-
 
 class MeasureUnitForm(forms.Form):
     measure_name = forms.CharField(max_length=128)

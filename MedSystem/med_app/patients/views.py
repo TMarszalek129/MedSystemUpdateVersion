@@ -88,6 +88,15 @@ def details(request, id):
     return HttpResponse(template.render(context, request))
 
 def exams(request, id):
+    if request.method == 'GET':
+        pass
+    else:
+        entry_id = request.POST['entry_id']
+        if(entry_id):
+            deleted = models.Measurement.objects.get(id=entry_id)
+            deleted.delete()
+            return redirect('/patients/details/' + str(id) +'/exams')
+
     patient = models.Patient.objects.get(id=id)
     first_name = patient.firstname
     last_name = patient.lastname
@@ -99,16 +108,18 @@ def exams(request, id):
     sex_word = 'man' if sex == 'M' else 'woman'
 
     measurements = models.Measurement.objects.filter(patient_id=id).order_by('-timestamp').values()
-    weight = models.Measurement.objects.filter(patient_id=id, measure_id=1).order_by('-timestamp').values()[0]['value_a']
-    height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()[0]['value_a']
+    weight = models.Measurement.objects.filter(patient_id=id, measure_id=1).order_by('-timestamp').values()
+    height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()
     pulse_values = models.Measurement.objects.filter(patient_id=id, measure_id=4).order_by('-timestamp').values()
     pressure_values = models.Measurement.objects.filter(patient_id=id, measure_id=3).order_by('-timestamp').values()
 
     bmi = 0
     entry = ''
     com = ''
-    if(weight & height):
-        bmi = round(weight / ( (height/100) * (height/100) ), 2)
+    if(weight and height):
+        weight_v = weight[0]['value_a']
+        height_v = height[0]['value_a']
+        bmi = round(weight_v / ( (height_v/100) * (height_v/100) ), 2)
         entry = "Your BMI based on last height and weight measurements: "
         if(bmi <= 25 and bmi >= 18.5):
             com = " -- Your weight is optimum"
@@ -163,6 +174,8 @@ def exams(request, id):
         diast_pressure_down = 70
 
     pulse_array = []
+    pulse_parameters = []
+    pulse_com = ''
     for p in pulse_values:
         if(datetime.datetime.strptime(p['timestamp'].strftime('%Y-%m-%d'), '%Y-%m-%d') > datetime.datetime.strptime((datetime.datetime.today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'), '%Y-%m-%d')):
             pulse_array.append(p['value_a'])
@@ -175,13 +188,14 @@ def exams(request, id):
         pulse_max = round(pulse_max, 2)
         pulse_parameters = [pulse_mean, pulse_max, pulse_min]
 
-        pulse_com = ''
         if (pulse_mean < pulse_down and len(pulse_array) > 3):
             pulse_com = f"Your average pulse value is too low (standard: {pulse_down} - {pulse_up}), please visit the doctor"
         if (pulse_mean > pulse_up and len(pulse_array) > 3):
             pulse_com = f"Your average pulse value is too high (standard: {pulse_down} - {pulse_up}), please visit the doctor"
 
     systonic_array, diastonic_array = [], []
+    syst_parameters, diast_parameters = [], []
+    syst_com, diast_com = '', ''
     for p in pressure_values:
         if (datetime.datetime.strptime(p['timestamp'].strftime('%Y-%m-%d'), '%Y-%m-%d') > datetime.datetime.strptime(
                 (datetime.datetime.today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'), '%Y-%m-%d')):
@@ -205,7 +219,6 @@ def exams(request, id):
         diast_max = round(diast_max, 2)
         diast_parameters = [diast_mean, diast_max, diast_min]
 
-        syst_com, diast_com = '', ''
         if (syst_mean < sys_pressure_down and len(systonic_array) > 3):
             syst_com = f"Your systonic heart pressure value is too low (standard: {sys_pressure_down} - {sys_pressure_up}), please visit the doctor"
         if (syst_mean > sys_pressure_up and len(systonic_array) > 3):
@@ -243,10 +256,15 @@ def exams(request, id):
 def new_measurement(request, id):
     if request.method == 'GET':
         form = forms.FormMeasurement()
+
+        form.measure_id = models.Measure.objects.filter(id=2) or models.Measure.objects.filter(id=0)
+        form.save(commit=False)
     else:
         form = forms.FormMeasurement(request.POST)
+
         if form.is_valid():
             measurement = form.save(commit=False)
+            #measurement.measure_id = models.Measure.objects.filter(id=id) | models.Measure.objects.filter(id=0)
             measurement.patient_id = models.Patient.objects.get(id=id)
             measurement.save()
             return redirect('/patients/details/' + str(id))
