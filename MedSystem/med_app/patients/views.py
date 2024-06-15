@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.template import loader
 from django.views.generic import CreateView
@@ -277,16 +277,12 @@ def download_exams(request, id):
     return response
 def new_measurement(request, id):
     if request.method == 'GET':
-        form = forms.FormMeasurement()
-
-        form.measure_id = models.Measure.objects.filter(id=2) or models.Measure.objects.filter(id=0)
-        form.save(commit=False)
+        form = forms.FormMeasurement(patient_id=id)
     else:
-        form = forms.FormMeasurement(request.POST)
+        form = forms.FormMeasurement(request.POST,patient_id=id)
 
         if form.is_valid():
             measurement = form.save(commit=False)
-            #measurement.measure_id = models.Measure.objects.filter(id=id) | models.Measure.objects.filter(id=0)
             measurement.patient_id = models.Patient.objects.get(id=id)
             measurement.save()
             return redirect('/patients/details/' + str(id))
@@ -309,6 +305,21 @@ def new_measure(request, id):
         form = forms.MeasureUnitForm(initial={'patient_id': patient.id})
 
     return render(request, "new_measure.html", {"f": form, "id": id})
+
+def edit_measure(request, id):
+    patient = get_object_or_404(models.Patient, pk=id)
+
+    if request.method == 'POST':
+        form = forms.EditMeasureUnitForm(request.POST, patient_id=patient.id)
+        if form.is_valid():
+            form.save(commit=False)
+            form.patient_id = models.Patient.objects.get(id=id)
+            form.save()
+            return redirect('/patients/details/' + str(id))
+    else:
+        form = forms.EditMeasureUnitForm(patient_id=patient.id)
+
+    return render(request, 'edit_measure_form.html', {'form': form, "id": id})
 
 
 
