@@ -13,6 +13,10 @@ class FormChangePassword(forms.Form):
     oldpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='Old Password')
     newpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='New Password')
 
+class FormDelMeasurement(forms.Form):
+    patient_id = forms.HiddenInput()
+    entry_id = forms.HiddenInput()
+
 class FormPatient(forms.ModelForm):
 
     """
@@ -35,7 +39,7 @@ class FormMeasurement(forms.ModelForm):
         model = models.Measurement
         fields = '__all__'
         widgets = {'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
-                   'patient_id': forms.HiddenInput(attrs={'value': 0})}
+                   'patient_id': forms.HiddenInput(attrs={'value': 0}),
+                   }
 
     field_order = ['measure_id', 'value_a', 'value_b', 'timestamp']
-

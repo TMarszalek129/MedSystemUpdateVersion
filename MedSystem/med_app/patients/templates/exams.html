@@ -66,6 +66,7 @@ My examinations
     <th>Value B</th>
     <th>Unit</th>
     <th>Timestamp</th>
+    <th>Options</th>
   </tr>
   {% for meas in m %}
   <tr>
@@ -74,6 +75,13 @@ My examinations
     <td>{{meas.value_b}}</td>
     <td>{{meas.unit}}</td>
     <td>{{meas.timestamp}}</td>
+    <td>
+        <form method="POST">
+         {% csrf_token %}
+         <input type="hidden" name = "entry_id" value={{meas.id}}>
+         <input type="submit" value="Del entry">
+        </form>
+    </td>
   {% endfor %}
   </tr>
 

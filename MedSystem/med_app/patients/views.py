@@ -86,6 +86,15 @@ def details(request, id):
     return HttpResponse(template.render(context, request))
 
 def exams(request, id):
+    if request.method == 'GET':
+        pass
+    else:
+        entry_id = request.POST['entry_id']
+        if(entry_id):
+            deleted = models.Measurement.objects.get(id=entry_id)
+            deleted.delete()
+            return redirect('/patients/details/' + str(id) +'/exams')
+
     patient = models.Patient.objects.get(id=id)
     first_name = patient.firstname
     last_name = patient.lastname
@@ -97,8 +106,8 @@ def exams(request, id):
     sex_word = 'man' if sex == 'M' else 'woman'
 
     measurements = models.Measurement.objects.filter(patient_id=id).order_by('-timestamp').values()
-    weight = models.Measurement.objects.filter(patient_id=id, measure_id=1).order_by('-timestamp').values()[0]['value_a']
-    height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()[0]['value_a']
+    weight = models.Measurement.objects.filter(patient_id=id, measure_id=1).order_by('-timestamp').values()
+    height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()
     pulse_values = models.Measurement.objects.filter(patient_id=id, measure_id=4).order_by('-timestamp').values()
     pressure_values = models.Measurement.objects.filter(patient_id=id, measure_id=3).order_by('-timestamp').values()
 
@@ -106,6 +115,8 @@ def exams(request, id):
     entry = ''
     com = ''
     if(weight & height):
+        weight = weight[0]['value_a']
+        height = height[0]['value_a']
         bmi = round(weight / ( (height/100) * (height/100) ), 2)
         entry = "Your BMI based on last height and weight measurements: "
         if(bmi <= 25 and bmi >= 18.5):
