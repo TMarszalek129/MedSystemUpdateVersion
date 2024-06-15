@@ -6,6 +6,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 import datetime
+import csv
 import numpy as np
 from . import models, forms
 from django.http import Http404
@@ -37,7 +38,7 @@ def signup(request):
     if request.method == 'GET':
         form = forms.FormPatient()
     else:
-        form = forms.FormPatient(request.POST)
+        form = forms.FormPatient(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('main')
@@ -253,6 +254,28 @@ def exams(request, id):
         'dcom' : diast_com,
     }
     return HttpResponse(template.render(context, request))
+
+def download_exams(request, id):
+    exams = models.Measurement.objects.filter(patient_id=id).values()
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="my_exams.csv"'},
+    )
+
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(["Measure", "Value A", "Value B", "Unit", "Timestamp"])
+    for m in exams:
+        measure = models.Measure.objects.get(id=m['measure_id_id'])
+        m['unit'] = measure.unit_id
+        m['measure'] = measure.measure_name
+        writer.writerow([
+            m['measure'],
+            m['value_a'],
+            m['value_b'],
+            m['unit'],
+            m['timestamp']
+        ])
+    return response
 def new_measurement(request, id):
     if request.method == 'GET':
         form = forms.FormMeasurement(patient_id=id)
