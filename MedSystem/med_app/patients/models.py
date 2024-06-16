@@ -11,6 +11,7 @@ class Patient(models.Model):
     sex = models.CharField(max_length=8, choices=SEX, null=True)
     login = models.CharField(max_length=255, null=True)
     password = models.CharField(max_length=255, null=True)
+    image = models.ImageField(null=True, upload_to='images/')
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"

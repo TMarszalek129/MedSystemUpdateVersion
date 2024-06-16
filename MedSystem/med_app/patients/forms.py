@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from . import models
 from django.db.models import Q
 
@@ -14,9 +15,7 @@ class FormChangePassword(forms.Form):
     oldpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='Old Password')
     newpassword = forms.CharField(required=False, widget=forms.PasswordInput, label='New Password')
 
-class FormDelMeasurement(forms.Form):
-    patient_id = forms.HiddenInput()
-    entry_id = forms.HiddenInput()
+
 
 class FormPatient(forms.ModelForm):
 
