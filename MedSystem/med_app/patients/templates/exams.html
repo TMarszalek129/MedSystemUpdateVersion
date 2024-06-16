@@ -78,11 +78,9 @@ My examinations
     <td>{{meas.unit}}</td>
     <td>{{meas.timestamp}}</td>
     <td>
-        <form method="POST">
-         {% csrf_token %}
-         <input type="hidden" name = "entry_id" value={{meas.id}}>
-         <input type="submit" value="Del entry">
-        </form>
+
+        <p><a class="btn btn-primary "  href="exams/edit_measurement/{{meas.id}}" >Edit this measurement <i class="bi bi-list-check"></i></i></a></p>
+        <p><a class="btn btn-primary "  href="exams/del_measurement/{{meas.id}}" >Delete this measurement <i class="bi bi-list-check"></i></i></a></p>
     </td>
   {% endfor %}
   </tr>

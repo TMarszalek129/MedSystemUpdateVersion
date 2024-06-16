@@ -46,10 +46,6 @@ class FormMeasurement(forms.ModelForm):
             'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
             'patient_id': forms.HiddenInput(),
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 726307325cf0486bc83418cff8fbf8016371a4be
 
     def __init__(self, *args, **kwargs):
         self.patient_id = kwargs.pop('patient_id', None)
@@ -59,10 +55,6 @@ class FormMeasurement(forms.ModelForm):
         self.fields['patient_id'].initial = self.patient_id
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 726307325cf0486bc83418cff8fbf8016371a4be
 
 
 class MeasureUnitForm(forms.Form):
@@ -164,3 +156,15 @@ class DeleteMeasureForm(forms.Form):
         super().__init__(*args, **kwargs)
         if patient_id is not None:
             self.fields['measure'].queryset = models.Measure.objects.filter(patient_id=patient_id).exclude(patient_id=0)
+
+class SelectMeasureForm(forms.Form):
+    measure = forms.ModelChoiceField(
+        queryset=models.Measure.objects.none(),
+        label="Select Measure"
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.patient_id = kwargs.pop('patient_id', None)
+        super().__init__(*args, **kwargs)
+        if self.patient_id is not None:
+            self.fields['measure'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))

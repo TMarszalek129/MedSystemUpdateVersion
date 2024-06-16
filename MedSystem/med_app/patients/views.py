@@ -12,6 +12,9 @@ import numpy as np
 from . import models, forms
 from django.http import Http404
 from django.contrib import messages
+import matplotlib.pyplot as plt
+import io
+import urllib, base64
 
 def main(request):
 
@@ -91,14 +94,6 @@ def details(request, id):
     return HttpResponse(template.render(context, request))
 
 def exams(request, id):
-    if request.method == 'GET':
-        pass
-    else:
-        entry_id = request.POST['entry_id']
-        if(entry_id):
-            deleted = models.Measurement.objects.get(id=entry_id)
-            deleted.delete()
-            return redirect('/patients/details/' + str(id) +'/exams')
 
     patient = models.Patient.objects.get(id=id)
     first_name = patient.firstname
@@ -328,7 +323,7 @@ def measurements_csv(request, id):
                 print("Sth is wrong!")
                 commit = None
             if commit is not None:
-                return redirect('/patients/details/' + str(id) +'/exams')
+                return redirect('/patients/details/' + str(id) +'/exams/')
 
 
 
@@ -364,13 +359,24 @@ def new_measure(request, id):
 
     return render(request, "new_measure.html", {"f": form, "id": id})
 
+def edit_measurement(request, id, measurement_id):
+    if request.method == 'GET':
+        form = forms.FormMeasurement(patient_id=id)
+    else:
+        form = forms.FormMeasurement(request.POST,patient_id=id)
+        if form.is_valid():
+            measurement = models.Measurement.objects.get(id=measurement_id)
+            measurement.measure_id = models.Measure.objects.get(id=request.POST['measure_id'])
+            measurement.value_a = request.POST['value_a']
+            measurement.value_b = request.POST['value_b']
+            measurement.timestamp = request.POST['timestamp']
+            measurement.save()
+            return redirect('/patients/details/' + str(id) + '/exams')
+
+    return render(request, "edit_measurement.html", {"f": form, "id": id})
 def edit_measure(request, id):
     patient = get_object_or_404(models.Patient, pk=id)
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 726307325cf0486bc83418cff8fbf8016371a4be
     if request.method == 'POST':
         form = forms.EditMeasureUnitForm(request.POST, patient_id=patient.id)
         if form.is_valid():
@@ -382,6 +388,12 @@ def edit_measure(request, id):
         form = forms.EditMeasureUnitForm(patient_id=patient.id)
 
     return render(request, 'edit_measure_form.html', {'form': form, "id": id})
+
+def del_measurement(request, id, measurement_id):
+
+    deleted = models.Measurement.objects.get(id=measurement_id)
+    deleted.delete()
+    return redirect('/patients/details/' + str(id) +'/exams')
 
 def delete_measure(request, id):
     patient = get_object_or_404(models.Patient, pk=id)
@@ -402,6 +414,62 @@ def delete_measure(request, id):
         form = forms.DeleteMeasureForm(patient_id=patient.id)
 
     return render(request, 'delete_measure.html', {'form': form, "id": id})
+
+
+def plot_graph(measure):
+    measurements = models.Measurement.objects.filter(measure_id=measure).order_by('timestamp')
+
+    timestamps = [m.timestamp for m in measurements]
+    values_a = [m.value_a for m in measurements]
+    values_b = [m.value_b for m in measurements if m.value_b > 0]
+
+    # Plot value_a
+    plt.figure()
+    plt.plot(timestamps, values_a, label='Value A')
+    plt.xlabel('Timestamp')
+    plt.ylabel('Value A')
+    plt.title('Value A over Time')
+    plt.legend()
+    plt.tight_layout()
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri_a = 'data:image/png;base64,' + urllib.parse.quote(string)
+    buf.close()
+
+    uri_b = None
+    if values_b:
+        # Plot value_b
+        plt.figure()
+        plt.plot(timestamps, values_b, label='Value B', color='orange')
+        plt.xlabel('Timestamp')
+        plt.ylabel('Value B')
+        plt.title('Value B over Time')
+        plt.legend()
+        plt.tight_layout()
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        string = base64.b64encode(buf.read())
+        uri_b = 'data:image/png;base64,' + urllib.parse.quote(string)
+        buf.close()
+
+    return uri_a, uri_b
+
+def select_measure(request, id):
+    if request.method == 'POST':
+        form = forms.SelectMeasureForm(request.POST, patient_id=id)
+        if form.is_valid():
+            measure = form.cleaned_data['measure']
+            uri_a, uri_b = plot_graph(measure)
+            return render(request, 'display_graphs.html', {'form': form, 'uri_a': uri_a, 'uri_b': uri_b})
+    else:
+        form = forms.SelectMeasureForm(patient_id=id)
+
+    return render(request, 'select_measure.html', {'form': form, "id": id})
 
 def testing(request):
     mydata = models.Patient.objects.all().values()

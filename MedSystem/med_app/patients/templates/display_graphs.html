@@ -1,0 +1,22 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Graphs
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+</form>
+<h2>Graph for Value A</h2>
+<img src="{{ uri_a }}" alt="Graph for Value A">
+    {% if uri_b %}
+    <h2>Graph for Value B</h2>
+<img src="{{ uri_b }}" alt="Graph for Value B">
+{% endif %}
+
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}

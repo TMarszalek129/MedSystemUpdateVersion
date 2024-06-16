@@ -1,0 +1,16 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Graphs
+{% endblock %}
+
+{% block content %}
+
+<form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+</form>
+
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}
