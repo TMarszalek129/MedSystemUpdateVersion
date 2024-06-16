@@ -2,20 +2,17 @@
 <html>
 <body>
 
-<table border='1'>
-  <tr>
-    <th>ID</th>
-    <th>Firstname</th>
-    <th>Lastname</th>
-  </tr>
-  {% for x in patients %}
-    <tr>
-      <td>{{ x.id }}</td>
-        <td>{{ x.firstname }}</td>
-      <td>{{ x.lastname }}</td>
-    </tr>
-  {% endfor %}
-</table>
-
+<p>File: {{file}}</p>
+<p>Timestamp: {{timestamp}}</p>
+<p>Test: {{test}}</p>
+<p>Data: {{data}}</p>
+<p>File url: {{file_url}}</p>
+<p>i: {{i}}</p>
+<p>value_a: {{value_a}}</p>
+<p>Row: {{row}}</p>
+<p>Measure: {{measure}}</p>
+<p>Measure Obj: {{measure_obj}}</p>
+<p>Measure ID: {{measure_id}}</p>
+<p>Unit Obj: {{unit_obj}}</p>
 </body>
 </html>
