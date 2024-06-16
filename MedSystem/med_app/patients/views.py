@@ -10,6 +10,7 @@ import csv
 import numpy as np
 from . import models, forms
 from django.http import Http404
+from django.contrib import messages
 
 def main(request):
 
@@ -321,6 +322,26 @@ def edit_measure(request, id):
         form = forms.EditMeasureUnitForm(patient_id=patient.id)
 
     return render(request, 'edit_measure_form.html', {'form': form, "id": id})
+
+def delete_measure(request, id):
+    patient = get_object_or_404(models.Patient, pk=id)
+    if request.method == 'POST':
+        form = forms.DeleteMeasureForm(request.POST, patient_id=patient.id)
+        if form.is_valid():
+            measure = form.cleaned_data['measure']
+            # Usuń powiązane pomiary
+            models.Measurement.objects.filter(measure_id=measure).delete()
+            # Usuń powiązaną jednostkę
+            unit = measure.unit_id
+            measure.delete()
+            # Sprawdź, czy są inne badania związane z tą jednostką
+            if not models.Measure.objects.filter(unit_id=unit).exists():
+                unit.delete()
+            return redirect('/patients/details/' + str(id))
+    else:
+        form = forms.DeleteMeasureForm(patient_id=patient.id)
+
+    return render(request, 'delete_measure.html', {'form': form, "id": id})
 
 def testing(request):
     mydata = models.Patient.objects.all().values()

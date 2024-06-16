@@ -14,6 +14,7 @@ urlpatterns = [
     path('patients/details/<int:id>/new_measurement', views.new_measurement, name='new_measurement'),
     path('patients/details/<int:id>/new_measure', views.new_measure, name='new_measure'),
     path('patients/details/<int:id>/edit_measure', views.edit_measure, name='edit_measure'),
+    path('patients/details/<int:id>/delete_measure', views.delete_measure, name='delete_measure'),
     path('testing/', views.testing, name='testing')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

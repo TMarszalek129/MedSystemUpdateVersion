@@ -1,0 +1,14 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Delete Tests
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Delete</button>
+</form>
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}

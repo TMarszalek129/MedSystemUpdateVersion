@@ -5,7 +5,9 @@
 {% block content %}
 
     <h1>{{ pt.firstname }} {{ pt.lastname }}</h1>
+    {% if pt.image %}
     <img src="{{pt.image.url}}" alt="Your photo here" width="150" height="200">
+    {% endif %}
     <p>Login: {{ pt.login }}</p>
 
     <p>Data of birth: {{ pt.birthdate }}</p>
@@ -15,5 +17,6 @@
     <p><a class="btn btn-primary "  href="./{{pt.id}}/new_measurement" >Add measurement <i class="bi bi-plus-square"></i></a></p>
     <p><a class="btn btn-primary "  href="./{{pt.id}}/new_measure" >Add test <i class="bi bi-plus-square"></i></a></p>
     <p><a class="btn btn-primary "  href="./{{pt.id}}/edit_measure" >Edit test <i class="bi bi-plus-square"></i></a></p>
+    <p><a class="btn btn-primary "  href="./{{pt.id}}/delete_measure" >Delete test <i class="bi bi-plus-square"></i></a></p>
     <p>Back to <a href="/patients">Patients</a></p>
 {% endblock %}

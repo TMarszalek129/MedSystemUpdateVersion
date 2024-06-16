@@ -32,7 +32,6 @@ class FormPatient(forms.ModelForm):
                    'password' : forms.PasswordInput
                    }
 class FormMeasurement(forms.ModelForm):
-<<<<<<< HEAD
     measure_id = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure")
     value_a = forms.DecimalField(max_digits=10, decimal_places=2, label="Value A")
 
@@ -50,15 +49,7 @@ class FormMeasurement(forms.ModelForm):
         if self.patient_id is not None:
             self.fields['measure_id'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
         self.fields['patient_id'].initial = self.patient_id
-=======
 
-    class Meta:
-        model = models.Measurement
-        fields = '__all__'
-        widgets = {'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
-                   'patient_id': forms.HiddenInput(attrs={'value': 0}),
-                   }
->>>>>>> 01727599706b100b78898ae21297c72414c22eb4
 
 
 
@@ -149,3 +140,15 @@ class EditMeasureUnitForm(forms.Form):
         if commit:
             measure.save()
         return measure
+
+class DeleteMeasureForm(forms.Form):
+    measure = forms.ModelChoiceField(
+        queryset=models.Measure.objects.none(),
+        label="Select Measure to Delete"
+    )
+
+    def __init__(self, *args, **kwargs):
+        patient_id = kwargs.pop('patient_id', None)
+        super().__init__(*args, **kwargs)
+        if patient_id is not None:
+            self.fields['measure'].queryset = models.Measure.objects.filter(patient_id=patient_id).exclude(patient_id=0)
