@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from . import models
 from django.db.models import Q
 
@@ -42,6 +43,7 @@ class FormMeasurement(forms.ModelForm):
             'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
             'patient_id': forms.HiddenInput(),
         }
+<<<<<<< HEAD
 
     def __init__(self, *args, **kwargs):
         self.patient_id = kwargs.pop('patient_id', None)
@@ -51,6 +53,15 @@ class FormMeasurement(forms.ModelForm):
         self.fields['patient_id'].initial = self.patient_id
 
 
+=======
+
+    def __init__(self, *args, **kwargs):
+        self.patient_id = kwargs.pop('patient_id', None)
+        super(FormMeasurement, self).__init__(*args, **kwargs)
+        if self.patient_id is not None:
+            self.fields['measure_id'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
+        self.fields['patient_id'].initial = self.patient_id
+>>>>>>> a0c6ae94d8722e5259e613f4e9b8ba0517764fe9
 
 
 class MeasureUnitForm(forms.Form):

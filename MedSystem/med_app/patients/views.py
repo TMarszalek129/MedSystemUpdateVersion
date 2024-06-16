@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
@@ -310,6 +310,22 @@ def new_measure(request, id):
 
 def edit_measure(request, id):
     patient = get_object_or_404(models.Patient, pk=id)
+<<<<<<< HEAD
+=======
+
+    if request.method == 'POST':
+        form = forms.EditMeasureUnitForm(request.POST, patient_id=patient.id)
+        if form.is_valid():
+            form.save(commit=False)
+            form.patient_id = models.Patient.objects.get(id=id)
+            form.save()
+            return redirect('/patients/details/' + str(id))
+    else:
+        form = forms.EditMeasureUnitForm(patient_id=patient.id)
+
+    return render(request, 'edit_measure_form.html', {'form': form, "id": id})
+
+>>>>>>> refs/remotes/origin/main
 
     if request.method == 'POST':
         form = forms.EditMeasureUnitForm(request.POST, patient_id=patient.id)
