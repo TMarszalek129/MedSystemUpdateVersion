@@ -36,6 +36,9 @@ class Measurement(models.Model):
     value_b = models.IntegerField(null=True, default=0)
     timestamp = models.DateTimeField(default=datetime.datetime.now(), editable=True,)
 
+    def __str__(self):
+        return f"Measurement for {self.patient_id} - {self.measure_id}"
+
 
 
 

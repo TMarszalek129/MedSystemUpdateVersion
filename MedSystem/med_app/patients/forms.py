@@ -1,6 +1,7 @@
 from django import forms
 from django.db.models import Q
 from . import models
+from django.db.models import Q
 
 
 YEARS = list(range(1900, 2025))
@@ -45,6 +46,7 @@ class FormMeasurement(forms.ModelForm):
             'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
             'patient_id': forms.HiddenInput(),
         }
+<<<<<<< HEAD
 
     def __init__(self, *args, **kwargs):
         self.patient_id = kwargs.pop('patient_id', None)
@@ -52,6 +54,17 @@ class FormMeasurement(forms.ModelForm):
         if self.patient_id is not None:
             self.fields['measure_id'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
         self.fields['patient_id'].initial = self.patient_id
+
+
+=======
+
+    def __init__(self, *args, **kwargs):
+        self.patient_id = kwargs.pop('patient_id', None)
+        super(FormMeasurement, self).__init__(*args, **kwargs)
+        if self.patient_id is not None:
+            self.fields['measure_id'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
+        self.fields['patient_id'].initial = self.patient_id
+>>>>>>> a0c6ae94d8722e5259e613f4e9b8ba0517764fe9
 
 
 class MeasureUnitForm(forms.Form):
@@ -141,3 +154,15 @@ class EditMeasureUnitForm(forms.Form):
         if commit:
             measure.save()
         return measure
+
+class DeleteMeasureForm(forms.Form):
+    measure = forms.ModelChoiceField(
+        queryset=models.Measure.objects.none(),
+        label="Select Measure to Delete"
+    )
+
+    def __init__(self, *args, **kwargs):
+        patient_id = kwargs.pop('patient_id', None)
+        super().__init__(*args, **kwargs)
+        if patient_id is not None:
+            self.fields['measure'].queryset = models.Measure.objects.filter(patient_id=patient_id).exclude(patient_id=0)

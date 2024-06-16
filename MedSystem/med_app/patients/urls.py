@@ -16,6 +16,7 @@ urlpatterns = [
     path('patients/details/<int:id>/measurements_csv/download', views.download_template, name='down_template'),
     path('patients/details/<int:id>/new_measure', views.new_measure, name='new_measure'),
     path('patients/details/<int:id>/edit_measure', views.edit_measure, name='edit_measure'),
+    path('patients/details/<int:id>/delete_measure', views.delete_measure, name='delete_measure'),
     path('testing/', views.testing, name='testing')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
