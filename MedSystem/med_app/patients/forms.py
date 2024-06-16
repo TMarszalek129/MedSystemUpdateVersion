@@ -1,5 +1,6 @@
 from django import forms
 from . import models
+from django.db.models import Q
 
 
 YEARS = list(range(1900, 2025))
@@ -33,19 +34,24 @@ class FormPatient(forms.ModelForm):
                    'password' : forms.PasswordInput
                    }
 class FormMeasurement(forms.ModelForm):
-
-
-
+    measure_id = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure")
+    value_a = forms.DecimalField(max_digits=10, decimal_places=2, label="Value A")
 
     class Meta:
         model = models.Measurement
-        fields = '__all__'
-        widgets = {'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
-                   'patient_id': forms.HiddenInput(attrs={'value': 0}),
-                   'measure_id' : forms.MultipleChoiceField(choices=choices)
-                   }
+        fields = ['measure_id', 'value_a', 'value_b', 'timestamp', 'patient_id']
+        widgets = {
+            'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
+            'patient_id': forms.HiddenInput(),
+        }
 
-    field_order = ['measure_id', 'value_a', 'value_b', 'timestamp']
+    def __init__(self, *args, **kwargs):
+        self.patient_id = kwargs.pop('patient_id', None)
+        super(FormMeasurement, self).__init__(*args, **kwargs)
+        if self.patient_id is not None:
+            self.fields['measure_id'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
+        self.fields['patient_id'].initial = self.patient_id
+
 
 class MeasureUnitForm(forms.Form):
     measure_name = forms.CharField(max_length=128)
