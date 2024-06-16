@@ -4,6 +4,7 @@ from django.template import loader
 from django.views.generic import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.core.files.storage import FileSystemStorage
 import datetime
 import csv
 import numpy as np
@@ -275,6 +276,61 @@ def download_exams(request, id):
             m['timestamp']
         ])
     return response
+
+def download_template(request, id):
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="template.csv"'},
+    )
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(["Measure", "Value A", "Value B", "Unit", "Timestamp"])
+    writer.writerow(["Weight", "70", "0", "kg", "2024-06-16 12:00"])
+    return response
+
+def measurements_csv(request, id):
+    if request.method == 'GET':
+        form = forms.FormAddMeasurementCSV()
+    else:
+        form = forms.FormAddMeasurementCSV(request.POST, request.FILES)
+        if form.is_valid():
+
+            file = request.FILES['file']
+            fs = FileSystemStorage(location='files/')  # defaults to   MEDIA_ROOT
+            filename = fs.save(file.name, file)
+            try:
+                with open('files/'+filename, newline='') as csvfile:
+                    spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
+                    i = 0
+                    for row in spamreader:
+                        i += 1
+                        if (i == 1):
+                            continue
+                        measure = row[0]
+                        measure_obj = models.Measure.objects.filter(measure_name = measure).values()
+                        if not measure_obj:
+                            raise
+                        measure_id = measure_obj[0]['id']
+                        value_a = row[1]
+                        value_b = row[2]
+                        unit = row[3]
+                        unit_obj = models.Unit.objects.filter(unit_name=unit).values()
+                        if not unit_obj:
+                            raise
+                        timestamp = row[4]
+                        timestamp = datetime.datetime.strptime(timestamp, "%d.%m.%Y %H:%M")
+
+                        measurement = models.Measurement(patient_id_id=id, measure_id_id=measure_id, value_a=value_a, value_b=value_b, timestamp=timestamp)
+                        measurement.save()
+                    commit = True
+            except:
+                print("Sth is wrong!")
+                commit = None
+            if commit is not None:
+                return redirect('/patients/details/' + str(id) +'/exams')
+
+
+
+    return render(request, "measurements_csv.html", {"f": form, "id": id})
 def new_measurement(request, id):
     if request.method == 'GET':
         form = forms.FormMeasurement(patient_id=id)

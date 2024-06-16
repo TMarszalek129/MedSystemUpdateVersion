@@ -1,0 +1,33 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Add your measurements as csv file
+{% endblock %}
+
+{% block content %}
+<p>File must have defined structure, please download template file and fullfill
+<br> Use dd.mm.YYYY HH:MM date-time format</p>
+<p><a href="{% url 'down_template' id %}" >Download template file</a></p>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if not f.is_valid %}
+        <ul>
+        {% for pole, bledy in f.errors.items %}
+        	<li>{{ pole }}: {% for blad in bledy %}
+        		{{ blad }}
+        	{% endfor %}
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% endif %}
+
+<table>
+    {{ f.as_table }}
+</table>
+
+<input type="submit" value="Add measurements">
+</form>
+<p>{{file}}</p>
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}

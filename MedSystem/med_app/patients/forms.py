@@ -31,6 +31,9 @@ class FormPatient(forms.ModelForm):
         widgets = {'birthdate' : forms.SelectDateWidget(years=YEARS),
                    'password' : forms.PasswordInput
                    }
+
+class FormAddMeasurementCSV(forms.Form):
+    file = forms.FileField()
 class FormMeasurement(forms.ModelForm):
     measure_id = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure")
     value_a = forms.DecimalField(max_digits=10, decimal_places=2, label="Value A")
