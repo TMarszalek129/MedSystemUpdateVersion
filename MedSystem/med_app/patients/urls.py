@@ -22,6 +22,6 @@ urlpatterns = [
     path('patients/details/<int:id>/select_measure', views.select_measure, name='select_measure'),
     path('patients/details/<int:id>/plot_graph', views.plot_graph, name='plot_graph'),
     path('testing/', views.testing, name='testing')
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

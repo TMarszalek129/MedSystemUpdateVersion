@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.core.files.storage import FileSystemStorage
 import datetime
 import csv
+import json
 import numpy as np
 from . import models, forms
 from django.http import Http404
@@ -80,16 +81,25 @@ def patients(request):
         'patients': allpatients,
     }
     return HttpResponse(template.render(context, request))
+    #return render(request, template, context)
 
 def details(request, id):
     patient = models.Patient.objects.get(id=id)
     patient_birth = int(patient.birthdate.strftime("%Y"))
     today = datetime.datetime.today().year
     age = today - patient_birth
+
+    own_measures = models.Measure.objects.filter(patient_id=id).values()
+    if own_measures:
+        shown = True
+    else:
+        shown = False
+
     template = loader.get_template('details.html')
     context = {
         'pt': patient,
-        'age' : age
+        'age' : age,
+        'shown' : json.dumps(shown)
     }
     return HttpResponse(template.render(context, request))
 
