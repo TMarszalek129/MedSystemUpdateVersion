@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="" />
+    <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/migrations/0022_alter_measurement_timestamp.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/migrations/0022_alter_measurement_timestamp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -95,6 +104,8 @@
       <workItem from="1718395327896" duration="100000" />
       <workItem from="1718395448863" duration="1357000" />
       <workItem from="1718444707261" duration="7922000" />
+      <workItem from="1718564771386" duration="497000" />
+      <workItem from="1718659676048" duration="642000" />
     </task>
     <servers />
   </component>

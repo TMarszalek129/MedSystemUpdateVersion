@@ -1,0 +1,41 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Graphs
+{% endblock %}
+
+{% block content %}
+
+<form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+</form>
+
+    {% if measure %}
+        <h2>Measure: {{ measure.measure_name }}</h2>
+        <div>
+            <canvas id="chartA"></canvas>
+        </div>
+        {% if values_b %}
+            <div>
+                <canvas id="chartB"></canvas>
+            </div>
+        {% endif %}
+        <script>
+            (function() {
+                var timestamps = {{ timestamps|safe }};
+                var valuesA = {{ values_a|safe }};
+                var valuesB = {{ values_b|safe }};
+
+                renderChart('chartA', timestamps, valuesA, 'Value A', 'rgba(75, 192, 192, 1)');
+
+                if (valuesB.length > 0) {
+                    renderChart('chartB', timestamps, valuesB, 'Value B', 'rgba(255, 99, 132, 1)');
+                }
+            })();
+        </script>
+    {% endif %}
+
+<p><a href="/patients/details/{{id}}">Back to your account</a></p>
+{% endblock %}
