@@ -5,6 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/MedSystem.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/files/my_exams.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/files/my_exams_z8zuo1T.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/files/template_pPb4Xx3.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/static/wykres.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/display_graphs.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/select_measure.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" afterDir="false" />
@@ -105,7 +115,7 @@
       <workItem from="1718395448863" duration="1357000" />
       <workItem from="1718444707261" duration="7922000" />
       <workItem from="1718564771386" duration="497000" />
-      <workItem from="1718659676048" duration="642000" />
+      <workItem from="1718659676048" duration="1807000" />
     </task>
     <servers />
   </component>

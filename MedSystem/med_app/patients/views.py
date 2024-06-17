@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.core.files.storage import FileSystemStorage
 import datetime
 import csv
+import json
 import numpy as np
 from . import models, forms
 from django.http import Http404
@@ -80,28 +81,29 @@ def patients(request):
         'patients': allpatients,
     }
     return HttpResponse(template.render(context, request))
+    #return render(request, template, context)
 
 def details(request, id):
     patient = models.Patient.objects.get(id=id)
     patient_birth = int(patient.birthdate.strftime("%Y"))
     today = datetime.datetime.today().year
     age = today - patient_birth
+
+    own_measures = models.Measure.objects.filter(patient_id=id).values()
+    if own_measures:
+        shown = True
+    else:
+        shown = False
+
     template = loader.get_template('details.html')
     context = {
         'pt': patient,
-        'age' : age
+        'age' : age,
+        'shown' : json.dumps(shown)
     }
     return HttpResponse(template.render(context, request))
 
 def exams(request, id):
-    if request.method == 'GET':
-        pass
-    else:
-        entry_id = request.POST['entry_id']
-        if(entry_id):
-            deleted = models.Measurement.objects.get(id=entry_id)
-            deleted.delete()
-            return redirect('/patients/details/' + str(id) +'/exams')
 
     patient = models.Patient.objects.get(id=id)
     first_name = patient.firstname
@@ -331,7 +333,7 @@ def measurements_csv(request, id):
                 print("Sth is wrong!")
                 commit = None
             if commit is not None:
-                return redirect('/patients/details/' + str(id) +'/exams')
+                return redirect('/patients/details/' + str(id) +'/exams/')
 
 
 
@@ -367,6 +369,21 @@ def new_measure(request, id):
 
     return render(request, "new_measure.html", {"f": form, "id": id})
 
+def edit_measurement(request, id, measurement_id):
+    if request.method == 'GET':
+        form = forms.FormMeasurement(patient_id=id)
+    else:
+        form = forms.FormMeasurement(request.POST,patient_id=id)
+        if form.is_valid():
+            measurement = models.Measurement.objects.get(id=measurement_id)
+            measurement.measure_id = models.Measure.objects.get(id=request.POST['measure_id'])
+            measurement.value_a = request.POST['value_a']
+            measurement.value_b = request.POST['value_b']
+            measurement.timestamp = request.POST['timestamp']
+            measurement.save()
+            return redirect('/patients/details/' + str(id) + '/exams')
+
+    return render(request, "edit_measurement.html", {"f": form, "id": id})
 def edit_measure(request, id):
     patient = get_object_or_404(models.Patient, pk=id)
 
@@ -381,6 +398,12 @@ def edit_measure(request, id):
         form = forms.EditMeasureUnitForm(patient_id=patient.id)
 
     return render(request, 'edit_measure_form.html', {'form': form, "id": id})
+
+def del_measurement(request, id, measurement_id):
+
+    deleted = models.Measurement.objects.get(id=measurement_id)
+    deleted.delete()
+    return redirect('/patients/details/' + str(id) +'/exams')
 
 def delete_measure(request, id):
     patient = get_object_or_404(models.Patient, pk=id)

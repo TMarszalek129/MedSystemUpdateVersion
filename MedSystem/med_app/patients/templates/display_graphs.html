@@ -6,11 +6,16 @@ Graphs
 
 {% block content %}
 
+<<<<<<< HEAD
 <form method="post">
+=======
+<form method="POST">
+>>>>>>> b430ae8fa11b273e1a96cf44132a9de337c963a9
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
 </form>
+<<<<<<< HEAD
 
     {% if measure %}
         <h2>Measure: {{ measure.measure_name }}</h2>
@@ -36,6 +41,14 @@ Graphs
             })();
         </script>
     {% endif %}
+=======
+<h2>Graph for Value A</h2>
+<img src="{{ uri_a }}" alt="Graph for Value A">
+    {% if uri_b %}
+    <h2>Graph for Value B</h2>
+<img src="{{ uri_b }}" alt="Graph for Value B">
+{% endif %}
+>>>>>>> b430ae8fa11b273e1a96cf44132a9de337c963a9
 
 <p><a href="/patients/details/{{id}}">Back to your account</a></p>
 {% endblock %}
