@@ -1,5 +1,6 @@
-function renderChart(canvasId, labels, data, label, borderColor) {
+function renderChart(canvasId, labels, data, label, borderColor,unit) {
     const ctx = document.getElementById(canvasId);
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -12,25 +13,26 @@ function renderChart(canvasId, labels, data, label, borderColor) {
                 fill: false
             }]
         },
+
         options: {
             scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: unit
+                    }
+                },
                 x: {
-                    type: 'time',
-                    time: {
-                        unit: 'minute'
-                    },
                     title: {
                         display: true,
                         text: 'Timestamp'
                     }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: label
-                    }
                 }
             }
         }
+
+
     });
+
 }
+

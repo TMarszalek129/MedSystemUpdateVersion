@@ -426,60 +426,32 @@ def delete_measure(request, id):
     return render(request, 'delete_measure.html', {'form': form, "id": id})
 
 
-def plot_graph(measure):
-    measurements = models.Measurement.objects.filter(measure_id=measure).order_by('timestamp')
-
-    timestamps = [m.timestamp for m in measurements]
-    values_a = [m.value_a for m in measurements]
-    values_b = [m.value_b for m in measurements if m.value_b > 0]
-
-    # Plot value_a
-    plt.figure()
-    plt.plot(timestamps, values_a, label='Value A')
-    plt.xlabel('Timestamp')
-    plt.ylabel('Value A')
-    plt.title('Value A over Time')
-    plt.legend()
-    plt.tight_layout()
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri_a = 'data:image/png;base64,' + urllib.parse.quote(string)
-    buf.close()
-
-    uri_b = None
-    if values_b:
-        # Plot value_b
-        plt.figure()
-        plt.plot(timestamps, values_b, label='Value B', color='orange')
-        plt.xlabel('Timestamp')
-        plt.ylabel('Value B')
-        plt.title('Value B over Time')
-        plt.legend()
-        plt.tight_layout()
-
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        string = base64.b64encode(buf.read())
-        uri_b = 'data:image/png;base64,' + urllib.parse.quote(string)
-        buf.close()
-
-    return uri_a, uri_b
-
-def select_measure(request, id):
+def select_measure_view(request,id):
+    patient_id = id  # lub inna metoda na uzyskanie ID pacjenta
     if request.method == 'POST':
-        form = forms.SelectMeasureForm(request.POST, patient_id=id)
+        form = forms.SelectMeasureForm(request.POST, patient_id=patient_id)
         if form.is_valid():
             measure = form.cleaned_data['measure']
-            uri_a, uri_b = plot_graph(measure)
-            return render(request, 'display_graphs.html', {'form': form, 'uri_a': uri_a, 'uri_b': uri_b})
-    else:
-        form = forms.SelectMeasureForm(patient_id=id)
+            measurements = models.Measurement.objects.filter(measure_id=measure)
+            timestamps = [measurement.timestamp.strftime('%Y-%m-%d %H:%M:%S') for measurement in measurements]
+            values_a = [measurement.value_a for measurement in measurements]
+            values_b = [measurement.value_b for measurement in measurements if measurement.value_b > 0]
+            unit = models.Unit.objects.get(unit_name=measure.unit_id)
 
-    return render(request, 'select_measure.html', {'form': form, "id": id})
+            context = {
+                'form': form,
+                'measure': measure,
+                'timestamps': json.dumps(timestamps),
+                'values_a': json.dumps(values_a),
+                'values_b': json.dumps(values_b) if values_b else [],
+                'unit': json.dumps(unit.unit_name),
+                "id": id,
+            }
+            return render(request, 'display_graphs.html', context)
+    else:
+        form = forms.SelectMeasureForm(patient_id=patient_id)
+
+    return render(request, 'display_graphs.html', {'form': form, "id": id})
 
 def testing(request):
     mydata = models.Patient.objects.all().values()

@@ -1,54 +1,41 @@
 {% extends 'master.html' %}
-
+{% load static %}
 {% block title %}
 Graphs
 {% endblock %}
 
 {% block content %}
 
-<<<<<<< HEAD
-<form method="post">
-=======
 <form method="POST">
->>>>>>> b430ae8fa11b273e1a96cf44132a9de337c963a9
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
 </form>
-<<<<<<< HEAD
-
-    {% if measure %}
-        <h2>Measure: {{ measure.measure_name }}</h2>
-        <div>
-            <canvas id="chartA"></canvas>
-        </div>
+{% if measure %}
+   <h2>Measure: {{ measure.measure_name }}</h2>
+       <div>
+                <canvas id="chartA"></canvas>
+       </div>
         {% if values_b %}
-            <div>
-                <canvas id="chartB"></canvas>
-            </div>
+               <div>
+                    <canvas id="chartB"></canvas>
+               </div>
+
         {% endif %}
-        <script>
-            (function() {
-                var timestamps = {{ timestamps|safe }};
-                var valuesA = {{ values_a|safe }};
-                var valuesB = {{ values_b|safe }};
-
-                renderChart('chartA', timestamps, valuesA, 'Value A', 'rgba(75, 192, 192, 1)');
-
-                if (valuesB.length > 0) {
-                    renderChart('chartB', timestamps, valuesB, 'Value B', 'rgba(255, 99, 132, 1)');
-                }
-            })();
-        </script>
-    {% endif %}
-=======
-<h2>Graph for Value A</h2>
-<img src="{{ uri_a }}" alt="Graph for Value A">
-    {% if uri_b %}
-    <h2>Graph for Value B</h2>
-<img src="{{ uri_b }}" alt="Graph for Value B">
 {% endif %}
->>>>>>> b430ae8fa11b273e1a96cf44132a9de337c963a9
+<script>
+      (function() {
+                        var timestamps = {{ timestamps|safe }};
+                        var valuesA = {{ values_a|safe }};
+                        var valuesB = {{ values_b|safe }};
+                        var unit = {{ unit|safe }};
+                        renderChart('chartA', timestamps, valuesA, 'Value A', 'rgba(75, 192, 192, 1)',unit);
+                        if (valuesB.length > 0) {
+                            renderChart('chartB', timestamps, valuesB, 'Value B', 'rgba(255, 99, 132, 1)',unit);
+                        }
+
+      })();
+</script>
 
 <p><a href="/patients/details/{{id}}">Back to your account</a></p>
 {% endblock %}
