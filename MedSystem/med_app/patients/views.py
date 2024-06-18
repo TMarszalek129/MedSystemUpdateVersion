@@ -89,6 +89,105 @@ def details(request, id):
     today = datetime.datetime.today().year
     age = today - patient_birth
 
+    weight = models.Measurement.objects.filter(patient_id=id, measure_id=1).order_by('-timestamp').values()
+    height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()
+    pulse_values = models.Measurement.objects.filter(patient_id=id, measure_id=4).order_by('-timestamp').values()
+    pressure_values = models.Measurement.objects.filter(patient_id=id, measure_id=3).order_by('-timestamp').values()
+    bmi = 0
+    bmi_problem = False
+    if (weight and height):
+        weight_v = weight[0]['value_a']
+        height_v = height[0]['value_a']
+        bmi = round(weight_v / ((height_v / 100) * (height_v / 100)), 2)
+        if (not(bmi <= 25 and bmi >= 18.5) and bmi > 0):
+            bmi_problem = True
+
+
+    if (age <= 1):
+
+        pulse_up = 205
+        pulse_down = 105
+        sys_pressure_up = 100 # systolic
+        sys_pressure_down = 90
+        diast_pressure_up = 60 # diastolic
+        diast_pressure_down = 55
+
+    elif (age < 11) :
+
+        pulse_up = 140
+        pulse_down = 80
+        sys_pressure_up = 110
+        sys_pressure_down = 100
+        diast_pressure_up = 75
+        diast_pressure_down = 70
+
+    elif (age < 20):
+
+        pulse_up = 100
+        pulse_down = 60
+        sys_pressure_up = 129
+        sys_pressure_down = 120
+        diast_pressure_up = 84
+        diast_pressure_down = 80
+
+    elif (age < 60):
+
+        pulse_up = 80
+        pulse_down = 60
+        sys_pressure_up = 129
+        sys_pressure_down = 120
+        diast_pressure_up = 84
+        diast_pressure_down = 80
+
+    else:
+
+        pulse_up = 70
+        pulse_down = 50
+        sys_pressure_up = 139
+        sys_pressure_down = 130
+        diast_pressure_up = 79
+        diast_pressure_down = 70
+
+    heart_problem = False
+    pulse_array = []
+    for p in pulse_values:
+        if(datetime.datetime.strptime(p['timestamp'].strftime('%Y-%m-%d'), '%Y-%m-%d') > datetime.datetime.strptime((datetime.datetime.today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'), '%Y-%m-%d')):
+            pulse_array.append(p['value_a'])
+    if(pulse_array):
+        pulse_mean = np.mean(pulse_array)
+        pulse_mean = round(pulse_mean, 2)
+
+        if (pulse_mean < pulse_down and len(pulse_array) > 3):
+            heart_problem = True
+        if (pulse_mean > pulse_up and len(pulse_array) > 3):
+            heart_problem = True
+
+    systonic_array, diastonic_array = [], []
+    for p in pressure_values:
+        if (datetime.datetime.strptime(p['timestamp'].strftime('%Y-%m-%d'), '%Y-%m-%d') > datetime.datetime.strptime(
+                (datetime.datetime.today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'), '%Y-%m-%d')):
+            if(p['value_a'] and p['value_b']):
+                systonic_array.append(p['value_a'])
+                diastonic_array.append(p['value_b'])
+    if (systonic_array and diastonic_array):
+        syst_mean = np.mean(systonic_array)
+        syst_mean = round(syst_mean, 2)
+
+        diast_mean = np.mean(diastonic_array)
+        diast_mean = round(diast_mean, 2)
+
+
+        if (syst_mean < sys_pressure_down and len(systonic_array) > 3):
+            heart_problem = True
+        if (syst_mean > sys_pressure_up and len(systonic_array) > 3):
+            heart_problem = True
+        if (diast_mean < diast_pressure_down and len(diastonic_array) > 3):
+            heart_problem = True
+        if (diast_mean > diast_pressure_up and len(diastonic_array) > 3):
+            heart_problem = True
+
+    problems = [bmi_problem, heart_problem]
+
     own_measures = models.Measure.objects.filter(patient_id=id).values()
     if own_measures:
         shown = True
@@ -99,7 +198,8 @@ def details(request, id):
     context = {
         'pt': patient,
         'age' : age,
-        'shown' : json.dumps(shown)
+        'shown' : json.dumps(shown),
+        'problems' : json.dumps(problems)
     }
     return HttpResponse(template.render(context, request))
 
