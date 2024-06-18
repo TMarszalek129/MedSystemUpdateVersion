@@ -16,6 +16,7 @@ from django.contrib import messages
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
+from django.core.paginator import Paginator
 
 def main(request):
 
@@ -75,13 +76,29 @@ def change_pass(request):
 
 
 def patients(request):
-    allpatients = models.Patient.objects.all().values()
-    template = loader.get_template('all_patients.html')
-    context = {
-        'patients': allpatients,
-    }
-    return HttpResponse(template.render(context, request))
-    #return render(request, template, context)
+    patient = models.Patient.objects.all().values()
+    form = forms.PatientSearchForm(request.GET)
+    mess = ""
+    if form.is_valid():
+        lastname = form.cleaned_data.get('lastname')
+        if lastname:
+            patient = patient.filter(lastname__icontains=lastname).values()
+        firstname = form.cleaned_data.get('firstname')
+        if firstname:
+            patient = patient.filter(firstname__icontains=firstname).values()
+        if not patient:
+            patient = models.Patient.objects.all().values()
+            mess = "Don't find the patient"
+    paginator = Paginator(patient, 20)
+
+    return render(request, "all_patients.html", {
+        'patient': patient,
+        'form': form,
+        'paginator': paginator.page(1),
+        'mess': mess
+    })
+
+
 
 def details(request, id):
     patient = models.Patient.objects.get(id=id)
@@ -568,3 +585,4 @@ def testing(request):
         'patients': mydata,
     }
     return HttpResponse(template.render(context, request))
+

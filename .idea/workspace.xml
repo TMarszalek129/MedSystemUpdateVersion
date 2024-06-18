@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/search_patients.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/all_patients.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/all_patients.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/display_graphs.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/display_graphs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/master.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/master.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -47,7 +47,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/bartl/PycharmProjects/MedSystemUpdateVersion&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/bartl/Downloads/medisoft_09.05.2024&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -110,7 +110,10 @@
       <workItem from="1718444707261" duration="7922000" />
       <workItem from="1718564771386" duration="497000" />
       <workItem from="1718659676048" duration="4323000" />
-      <workItem from="1718697849992" duration="12552000" />
+      <workItem from="1718697849992" duration="13243000" />
+      <workItem from="1718725701428" duration="3072000" />
+      <workItem from="1718729630368" duration="2081000" />
+      <workItem from="1718736632676" duration="3283000" />
     </task>
     <servers />
   </component>

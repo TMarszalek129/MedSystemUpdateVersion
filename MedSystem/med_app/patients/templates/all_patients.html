@@ -1,5 +1,15 @@
 {% extends "master.html" %}
+{% block css %}
 
+.search-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+{% endblock %}
 {% block title %}
   All patients
 {% endblock %}
@@ -7,7 +17,17 @@
 
 {% block content %}
   <p><a href="/">HOME</a></p>
-
+    <div class="search-container">
+        <h2>Search patients:</h2>
+        <form method="get" id="searchForm">
+        {{ form.as_p }}
+         <input type="submit" value="Filter">
+        </form>
+        <p>{{ firstname }}</p>
+        {% if mess %}
+        <p style="color: red;">{{ mess }}</p>
+        {% endif %}
+    </div>
 
   <h1>Patients</h1>
   
@@ -18,7 +38,8 @@
     <th>Lastname</th>
       <th>Details</th>
   </tr>
-  {% for x in patients %}
+
+{% for x in paginator.object_list %}
     {% if x.id != 0 %}
     <tr>
       <td>{{ x.id }}</td>
@@ -27,6 +48,6 @@
     <td><a href=./details/{{x.id}}>INFO</a> </td>
     </tr>
     {% endif %}
-  {% endfor %}
+{% endfor %}
 </table>
 {% endblock %}

@@ -115,11 +115,14 @@ input {
 .addBtn:hover {
   background-color: #bbb;
 }
+
+
 {% endblock %}
 {% block title %}
   {{ pt.firstname }} {{ pt.lastname }}
 {% endblock %}
 {% block content %}
+
 
     <h1>{{ pt.firstname }} {{ pt.lastname }}</h1>
     {% if pt.image %}

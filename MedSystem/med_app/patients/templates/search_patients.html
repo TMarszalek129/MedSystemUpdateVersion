@@ -1,0 +1,22 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Patients
+{% endblock %}
+{% block content %}
+    <form method="get" id="searchForm">
+        {{ form.as_p }}
+    </form>
+
+    <ul>
+        {% for patient in patients %}
+            <li>{{ patient.firstname }} {{ patient.lastname }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        document.getElementById('search_name').addEventListener('input', function() {
+            document.getElementById('searchForm').submit();
+        });
+    </script>
+{% endblock %}

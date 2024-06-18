@@ -168,3 +168,7 @@ class SelectMeasureForm(forms.Form):
         super().__init__(*args, **kwargs)
         if self.patient_id is not None:
             self.fields['measure'].queryset = models.Measure.objects.filter(Q(patient_id=self.patient_id) | Q(patient_id=0))
+
+class PatientSearchForm(forms.Form):
+    firstname = forms.CharField(required=False)
+    lastname = forms.CharField(required=False)
