@@ -7,12 +7,9 @@
     <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/static/wykres.js" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/mystaticfiles/wykres.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/details.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/display_graphs.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/display_graphs.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/master.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/master.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/select_measure.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -113,7 +110,7 @@
       <workItem from="1718444707261" duration="7922000" />
       <workItem from="1718564771386" duration="497000" />
       <workItem from="1718659676048" duration="4323000" />
-      <workItem from="1718697849992" duration="11032000" />
+      <workItem from="1718697849992" duration="12552000" />
     </task>
     <servers />
   </component>

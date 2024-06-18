@@ -9,9 +9,12 @@ Graphs
 <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Submit</button>
+        <button type="submit">Select test</button>
 </form>
-{% if measure %}
+
+{% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+{% elif measure %}
    <h2>Measure: {{ measure.measure_name }}</h2>
        <div>
                 <canvas id="chartA"></canvas>

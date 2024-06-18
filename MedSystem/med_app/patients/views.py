@@ -532,22 +532,30 @@ def select_measure_view(request,id):
         form = forms.SelectMeasureForm(request.POST, patient_id=patient_id)
         if form.is_valid():
             measure = form.cleaned_data['measure']
-            measurements = models.Measurement.objects.filter(measure_id=measure)
-            timestamps = [measurement.timestamp.strftime('%Y-%m-%d %H:%M:%S') for measurement in measurements]
-            values_a = [measurement.value_a for measurement in measurements]
-            values_b = [measurement.value_b for measurement in measurements if measurement.value_b > 0]
-            unit = models.Unit.objects.get(unit_name=measure.unit_id)
+            measurements = models.Measurement.objects.filter(measure_id=measure, patient_id=patient_id)
+            if not measurements.exists():
+                context = {
+                    'form': form,
+                    'error_message': "You must first add a measurement for this test!",
+                    "id": id,
+                }
+                return render(request, 'display_graphs.html', context)
+            else:
+                timestamps = [measurement.timestamp.strftime('%Y-%m-%d %H:%M:%S') for measurement in measurements]
+                values_a = [measurement.value_a for measurement in measurements]
+                values_b = [measurement.value_b for measurement in measurements if measurement.value_b > 0]
+                unit = models.Unit.objects.get(unit_name=measure.unit_id)
 
-            context = {
-                'form': form,
-                'measure': measure,
-                'timestamps': json.dumps(timestamps),
-                'values_a': json.dumps(values_a),
-                'values_b': json.dumps(values_b) if values_b else [],
-                'unit': json.dumps(unit.unit_name),
-                "id": id,
-            }
-            return render(request, 'display_graphs.html', context)
+                context = {
+                    'form': form,
+                    'measure': measure,
+                    'timestamps': json.dumps(timestamps),
+                    'values_a': json.dumps(values_a),
+                    'values_b': json.dumps(values_b) if values_b else [],
+                    'unit': json.dumps(unit.unit_name),
+                    "id": id,
+                }
+                return render(request, 'display_graphs.html', context)
     else:
         form = forms.SelectMeasureForm(patient_id=patient_id)
 
