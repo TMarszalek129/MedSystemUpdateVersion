@@ -77,11 +77,11 @@ def change_pass(request):
 
 
 def patients(request: HttpRequest):
-    patients = models.Patient.objects.all()
+    patients = models.Patient.objects.all().values()
     form = forms.PatientSearchForm(request.GET)
-<<<<<<< HEAD
-    mess = ''
-    for p in patient:
+    mess = ""
+
+    for p in patients:
         if not p['birthdate']:
             age = 0
         else:
@@ -90,35 +90,6 @@ def patients(request: HttpRequest):
             age = today - patient_birth
         p['age'] = age
 
-    if form.is_valid():
-
-        lastname = form.cleaned_data.get('lastname')
-        if lastname:
-            patient = patient.filter(lastname__icontains=lastname).values()
-        firstname = form.cleaned_data.get('firstname')
-        if firstname:
-            patient = patient.filter(firstname__icontains=firstname).values()
-        age = form.cleaned_data.get('age')
-        if age:
-            patient = patient.filter(birthdate__year = datetime.datetime.today().year -age).values()
-        if not patient:
-            patient = models.Patient.objects.all().values()
-            mess = "Don't find the patient"
-
-        for p in patient:
-            if not p['birthdate']:
-                age = 0
-            else:
-                patient_birth = int(p['birthdate'].strftime("%Y"))
-                today = datetime.datetime.today().year
-                age = today - patient_birth
-            p['age'] = age
-
-
-
-    paginator = Paginator(patient, 20)
-=======
-    mess = ""
 
     if form.is_valid():
         lastname = form.cleaned_data.get('lastname')
@@ -127,34 +98,40 @@ def patients(request: HttpRequest):
         firstname = form.cleaned_data.get('firstname')
         if firstname:
             patients = patients.filter(firstname__icontains=firstname)
+        age = form.cleaned_data.get('age')
+        if age:
+            patients = patients.filter(birthdate__year=today-age)
         if not patients.exists():
-            patients = models.Patient.objects.all()
+            patients = models.Patient.objects.all().values()
             mess = "Don't find the patient"
 
         items_per_page = form.cleaned_data.get('items_per_page') or 20
+
+        for p in patients:
+            if not p['birthdate']:
+                age = 0
+            else:
+                patient_birth = int(p['birthdate'].strftime("%Y"))
+                today = datetime.datetime.today().year
+                age = today - patient_birth
+            p['age'] = age
     else:
         items_per_page = 20
 
-    paginator = Paginator(patients, items_per_page)
+    paginator = Paginator(patients, items_per_page + 1)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
     query_params = request.GET.copy()
     if 'page' in query_params:
         del query_params['page']
->>>>>>> refs/remotes/origin/main
 
     return render(request, "all_patients.html", {
         'patient': page_obj,
         'form': form,
         'mess': mess,
-<<<<<<< HEAD
-=======
         'query_params': query_params.urlencode()
->>>>>>> refs/remotes/origin/main
     })
-
-
 
 def details(request, id):
     patient = models.Patient.objects.get(id=id)

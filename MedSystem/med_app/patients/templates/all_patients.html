@@ -5,6 +5,9 @@
     top: 10px;
     right: 10px;
 }
+.paginator {
+
+}
 {% endblock %}
 
 {% block title %}
@@ -21,12 +24,11 @@
           <div>
               {{ form.firstname.label_tag }} {{ form.firstname }}
               {{ form.lastname.label_tag }} {{ form.lastname }}
+              {{form.age.label_tag}} {{form.age}}
               <input type="submit" value="Filter">
           </div>
-          <div>
-              {{ form.items_per_page.label_tag }} {{ form.items_per_page }}
-              <input type="submit" value="Number of patiens">
-          </div>
+
+
       </form>
       {% if mess %}
       <p style="color: red;">{{ mess }}</p>
@@ -38,25 +40,8 @@
       <th>ID</th>
       <th>Firstname</th>
       <th>Lastname</th>
+      <th>Age</th>
       <th>Details</th>
-<<<<<<< HEAD
-  </tr>
-
-{% for x in paginator.object_list %}
-    {% if x.id != 0 %}
-    <tr>
-    <td>{{ x.id }}</td>
-    <td>{{ x.firstname }}</td>
-    <td>{{ x.lastname }}</td>
-    <td>{{ x.age }}</td>
-    <td><a href=./details/{{x.id}}>INFO</a> </td>
-    </tr>
-    {% endif %}
-{% endfor %}
-
-</table>
-{% endblock %}
-=======
     </tr>
     {% for patient in patient %}
         {% if patient.id != 0 %}
@@ -64,6 +49,7 @@
           <td>{{ patient.id }}</td>
           <td>{{ patient.firstname }}</td>
           <td>{{ patient.lastname }}</td>
+          <td>{{patient.age}}</td>
           <td><a href=./details/{{ patient.id }}>INFO</a></td>
         </tr>
         {% endif %}
@@ -87,5 +73,11 @@
         {% endif %}
     </span>
   </div>
+
+<form method="get" id="pagin">
+    <div class="paginator">
+        {{ form.items_per_page.label_tag }} {{ form.items_per_page }}
+        <input type="submit" value="Number of patiens">
+    </div>
+</form>
 {% endblock %}
->>>>>>> refs/remotes/origin/main

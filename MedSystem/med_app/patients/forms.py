@@ -172,5 +172,6 @@ class SelectMeasureForm(forms.Form):
 class PatientSearchForm(forms.Form):
     firstname = forms.CharField(required=False)
     lastname = forms.CharField(required=False)
+    age = forms.IntegerField(required=False)
     items_per_page = forms.IntegerField(min_value=1, initial=20, required=False, label='Items per page')
 
