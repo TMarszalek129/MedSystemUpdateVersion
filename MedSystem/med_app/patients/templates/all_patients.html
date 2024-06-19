@@ -36,22 +36,27 @@
     <th>Age</th>
       <th>Details</th>
   </tr>
+{% if flag %}
+    {% for x in paginator_f.object_list %}
+        {% if x.id != 0 %}
+        <tr>
+            {% if x.age %}
+                <td>{{ x.id }}</td>
+            <td>{{ x.firstname }}</td>
+          <td>{{ x.lastname }}</td>
+                <td>{{ x.age }}</td>
 
-{% for x in paginator.object_list %}
-    {% if x.id != 0 %}
-    <tr>
-      <td>{{ x.id }}</td>
-        <td>{{ x.firstname }}</td>
-      <td>{{ x.lastname }}</td>
-        {% if x.age %}
-            <td>{{ x.age }}</td>
-        {% else %} 
-            <td>{{ age }}</td>
+            {% else %}
+                <td>{{ x.id }}</td>
+            <td>{{ x.firstname }}</td>
+          <td>{{ x.lastname }}</td>
+                <td>{{ age }}</td>
+            {% endif %}
+
+        <td><a href=./details/{{x.id}}>INFO</a> </td>
+        </tr>
         {% endif %}
-
-    <td><a href=./details/{{x.id}}>INFO</a> </td>
-    </tr>
-    {% endif %}
-{% endfor %}
+    {% endfor %}
+{% endif %}
 </table>
 {% endblock %}
