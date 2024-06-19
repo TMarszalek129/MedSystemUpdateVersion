@@ -484,7 +484,7 @@ def measurements_csv(request, id):
                 print("Sth is wrong!")
                 commit = None
             if commit is not None:
-                return redirect('/patients/details/' + str(id) +'/exams/')
+                return redirect('/patients/details/' + str(id) +'/exams')
 
 
 
@@ -584,10 +584,10 @@ def select_measure_view(request,id):
         if form.is_valid():
             measure = form.cleaned_data['measure']
             measurements = models.Measurement.objects.filter(measure_id=measure, patient_id=patient_id)
-            if not measurements.exists():
+            if not measurements.exists() or len(measurements) == 1:
                 context = {
                     'form': form,
-                    'error_message': "You must first add a measurement for this test!",
+                    'error_message': "You must first add at least two measurement for this test!",
                     "id": id,
                 }
                 return render(request, 'display_graphs.html', context)

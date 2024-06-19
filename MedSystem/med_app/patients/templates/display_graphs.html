@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load static %}
+
 {% block title %}
 Graphs
 {% endblock %}
@@ -28,14 +29,14 @@ Graphs
 {% endif %}
 <script>
       (function() {
-                        var timestamps = {{ timestamps|safe }};
-                        var valuesA = {{ values_a|safe }};
-                        var valuesB = {{ values_b|safe }};
-                        var unit = {{ unit|safe }};
-                        renderChart('chartA', timestamps, valuesA, 'Value A', 'rgba(75, 192, 192, 1)',unit);
-                        if (valuesB.length > 0) {
-                            renderChart('chartB', timestamps, valuesB, 'Value B', 'rgba(255, 99, 132, 1)',unit);
-                        }
+            var timestamps = {{ timestamps|safe }};
+            var valuesA = {{ values_a|safe }};
+            var valuesB = {{ values_b|safe }};
+            var unit = {{ unit|safe }};
+            renderChart('chartA', timestamps, valuesA, 'Value A', 'rgba(75, 192, 192, 1)',unit);
+            if (valuesB.length > 0) {
+                renderChart('chartB', timestamps, valuesB, 'Value B', 'rgba(255, 99, 132, 1)',unit);
+            }
 
       })();
 </script>

@@ -117,13 +117,47 @@ input {
 }
 
 
+.data {
+    display: flex;
+    height: 60vh;
+}
+
+.left, .right {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 80%;
+    max-width: 800px;
+    height: 100%; /* Occupies full height of container */
+    box-sizing: border-box;
+    background-color: #fff; /* White background */
+    border: 1px solid #ccc; /* Border for visibility */
+
+}
+
+
+.left {
+    background-color: #f2f2f2;
+    border-right: 2px solid #ccc;
+    height: 100%;
+
+
+}
+
+.right {
+    background-color: #e6e6e6;
+    height: 100%;
+}
+
+
 {% endblock %}
 {% block title %}
   {{ pt.firstname }} {{ pt.lastname }}
 {% endblock %}
 {% block content %}
 
-
+    <div class="data">
+    <div class="left">
     <h1>{{ pt.firstname }} {{ pt.lastname }}</h1>
     {% if pt.image %}
     <img src="{{pt.image.url}}" alt="Your photo here" width="150" height="200">
@@ -133,14 +167,17 @@ input {
     <p>Data of birth: {{ pt.birthdate }}</p>
     <p>You are a {{pt.sex}}</p>
     <p>You have {{age}} years</p>
-    <p><a class="btn btn-primary "  href="./exams" >Check your examinations <i class="bi bi-list-check"></i></a></p>
-    <p><a class="btn btn-primary "  href="./measurements_csv" >Add measurements as csv file <i class="bi bi-plus-square"></i></a></p>
-    <p><a class="btn btn-primary "  href="./new_measurement" >Add measurement <i class="bi bi-plus-square"></i></a></p>
-    <p><a class="btn btn-primary "  href="./new_measure" >Add measure <i class="bi bi-plus-square"></i></a></p>
-    <p id="edit_measure"><a class="btn btn-primary "  href="./edit_measure" >Edit measure <i class="bi bi-plus-square"></i></a></p>
-    <p id="delete_measure"><a class="btn btn-primary "  href="./delete_measure" >Delete measure <i class="bi bi-plus-square"></i></a></p>
-    <p><a class="btn btn-primary "  href="./select_measure_view" >Show plots <i class="bi bi-plus-square"></i></a></p>
-
+    </div>
+    <div class="right">
+    <p><a class="btn btn-primary w-100 d-inline-block" style = background-color:red;"  href="./exams" >Check your examinations <i class="bi bi-list-check"></i></a></p>
+    <p><a class="btn btn-primary w-100 d-inline-block" style = background-color:blue;" href="./measurements_csv" >Add measurements as csv file <i class="bi bi-filetype-csv"></i></a></p>
+    <p><a class="btn btn-primary w-100 d-inline-block" style = background-color:blue;" href="./new_measurement" >Add measurement <i class="bi bi-plus-square"></i></a></p>
+    <p><a class="btn btn-primary w-100 d-inline-block" style = background-color:blue;" href="./new_measure" >Add measure <i class="bi bi-clipboard2-plus"></i></a></p>
+    <p id="edit_measure"><a class="btn btn-primary w-100 d-inline-block" style = background-color:orange;" href="./edit_measure" >Edit measure <i class="bi bi-tools"></i></a></p>
+    <p id="delete_measure"><a class="btn btn-primary w-100 d-inline-block" style = background-color:purple;" href="./delete_measure" >Delete measure <i class="bi bi-trash"></i></a></p>
+    <p><a class="btn btn-primary w-100 d-inline-block" style = background-color:green;" href="./select_measure_view" >Show plots <i class="bi bi-graph-up"></i></a></p>
+    </div>
+    </div>
     <div id="myDIV" class="header">
       <h2 style="margin:5px">My To Do List</h2>
     </div>
@@ -158,5 +195,5 @@ input {
         })();
     </script>
 
-
+    <p><a class="btn btn-primary " style = background-color:black;" href='/' >Log out <i class="bi bi-arrow-bar-left"></i></a></p>
 {% endblock %}

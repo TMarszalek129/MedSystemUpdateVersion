@@ -7,8 +7,8 @@ from django.db.models import Q
 YEARS = list(range(1900, 2025))
 
 class FormLogin(forms.Form):
-    login = forms.CharField(required=False, label="Login")
-    password = forms.CharField(required=False, widget=forms.PasswordInput, label='Password')
+    login = forms.CharField(required=False, label="Login", widget=forms.TextInput(attrs={'style': 'width:250px'}))
+    password = forms.CharField(required=False, widget=forms.PasswordInput(attrs={'style': 'width:250px'}), label='Password' )
 
 class FormChangePassword(forms.Form):
     login = forms.CharField(required=False, label="Login")
@@ -29,22 +29,24 @@ class FormPatient(forms.ModelForm):
     class Meta:
         model = models.Patient
         fields = "__all__"
-        widgets = {'birthdate' : forms.SelectDateWidget(years=YEARS),
-                   'password' : forms.PasswordInput
+        widgets = {'birthdate' : forms.SelectDateWidget(years=YEARS, attrs={'style': 'width:63px'}),
+                   'password' : forms.PasswordInput,
+                   'sex' : forms.Select(attrs={'style': 'width:188px'})
                    }
 
 class FormAddMeasurementCSV(forms.Form):
     file = forms.FileField()
 class FormMeasurement(forms.ModelForm):
-    measure_id = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure")
-    value_a = forms.DecimalField(max_digits=10, decimal_places=2, label="Value A")
-
+    measure_id = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure", widget=forms.Select(attrs={'style': 'width:200px'}))
+    value_a = forms.DecimalField(max_digits=10, decimal_places=2, label="Value A", widget=forms.NumberInput(attrs={'style': 'width:200px'}))
+    value_b = forms.DecimalField(max_digits=10, decimal_places=2, label="Value B", widget=forms.NumberInput(attrs={'style': 'width:200px'}))
     class Meta:
         model = models.Measurement
         fields = ['measure_id', 'value_a', 'value_b', 'timestamp', 'patient_id']
         widgets = {
-            'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M'),
+            'timestamp': forms.DateTimeInput(format='%Y-%m-%d %H:%M', attrs={'style': 'width:200px'}),
             'patient_id': forms.HiddenInput(),
+
         }
 
     def __init__(self, *args, **kwargs):
@@ -98,9 +100,9 @@ class MeasureUnitForm(forms.Form):
 
 
 class EditMeasureUnitForm(forms.Form):
-    measure = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure to Edit")
-    measure_name = forms.CharField(max_length=128, label="New Measure Name")
-    unit_name = forms.CharField(max_length=10, label="New Unit Name")
+    measure = forms.ModelChoiceField(queryset=models.Measure.objects.none(), label="Select Measure to Edit", widget=forms.Select(attrs={'style': 'width:200px'}))
+    measure_name = forms.CharField(max_length=128, label="New Measure Name", widget=forms.TextInput(attrs={'style': 'width:200px'}))
+    unit_name = forms.CharField(max_length=10, label="New Unit Name", widget=forms.TextInput(attrs={'style': 'width:200px'}))
 
     def __init__(self, *args, **kwargs):
         self.patient_id = kwargs.pop('patient_id', None)

@@ -4,7 +4,31 @@
 Add your measurements as csv file
 {% endblock %}
 
+{%block css %}
+table{
+    position:relative; left:180px; top:2px;
+}
+
+.outer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: lightgray;
+    padding: 75px;
+    border: 3px solid black;
+
+}
+.inner{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+{% endblock %}
+
 {% block content %}
+<div class="outer">
+<div class="inner">
 <p>File must have defined structure, please download template file and fullfill
 <br> Use dd.mm.YYYY HH:MM date-time format</p>
 <p><a href="{% url 'down_template' id %}" >Download template file</a></p>
@@ -22,12 +46,12 @@ Add your measurements as csv file
 
     {% endif %}
 
-<table>
-    {{ f.as_table }}
-</table>
-
+<table>{{ f.as_table }}</table>
+<br>
 <input type="submit" value="Add measurements">
 </form>
 <p>{{file}}</p>
 <p><a href="/patients/details/{{id}}">Back to your account</a></p>
+</div>
+</div>
 {% endblock %}
