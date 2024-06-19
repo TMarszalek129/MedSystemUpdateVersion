@@ -1,40 +1,45 @@
 {% extends "master.html" %}
 {% block css %}
-
 .search-container {
     position: absolute;
     top: 10px;
     right: 10px;
 }
-
 {% endblock %}
+
 {% block title %}
   All patients
 {% endblock %}
 
-
 {% block content %}
   <p><a href="/">HOME</a></p>
-    <div class="search-container">
-        <h2>Search patients:</h2>
-        <form method="get" id="searchForm">
-        {{ form.as_p }}
-         <input type="submit" value="Filter">
-        </form>
-        {% if mess %}
-        <p style="color: red;">{{ mess }}</p>
-        {% endif %}
-    </div>
-
   <h1>Patients</h1>
-  
+
+  <div class="search-container">
+      <h2>Search patients:</h2>
+      <form method="get" id="searchForm">
+          <div>
+              {{ form.firstname.label_tag }} {{ form.firstname }}
+              {{ form.lastname.label_tag }} {{ form.lastname }}
+              <input type="submit" value="Filter">
+          </div>
+          <div>
+              {{ form.items_per_page.label_tag }} {{ form.items_per_page }}
+              <input type="submit" value="Number of patiens">
+          </div>
+      </form>
+      {% if mess %}
+      <p style="color: red;">{{ mess }}</p>
+      {% endif %}
+  </div>
+
   <table border='1'>
-  <tr>
-    <th>ID</th>
-    <th>Firstname</th>
-    <th>Lastname</th>
-    <th>Age</th>
+    <tr>
+      <th>ID</th>
+      <th>Firstname</th>
+      <th>Lastname</th>
       <th>Details</th>
+<<<<<<< HEAD
   </tr>
 
 {% for x in paginator.object_list %}
@@ -51,3 +56,36 @@
 
 </table>
 {% endblock %}
+=======
+    </tr>
+    {% for patient in patient %}
+        {% if patient.id != 0 %}
+        <tr>
+          <td>{{ patient.id }}</td>
+          <td>{{ patient.firstname }}</td>
+          <td>{{ patient.lastname }}</td>
+          <td><a href=./details/{{ patient.id }}>INFO</a></td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+  </table>
+
+  <div class="pagination">
+    <span class="step-links">
+        {% if patient.has_previous %}
+            <a href="?page=1&{{ query_params }}">first</a>
+            <a href="?page={{ patient.previous_page_number }}&{{ query_params }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ patient.number }} of {{ patient.paginator.num_pages }}.
+        </span>
+
+        {% if patient.has_next %}
+            <a href="?page={{ patient.next_page_number }}&{{ query_params }}">next</a>
+            <a href="?page={{ patient.paginator.num_pages }}&{{ query_params }}">last</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}
+>>>>>>> refs/remotes/origin/main

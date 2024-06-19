@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c76ed7cf-1ea2-4c2b-a2c3-eef06c1b52e9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/all_patients.html" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/templates/all_patients.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MedSystem/med_app/patients/views.py" afterDir="false" />
     </list>
@@ -111,7 +112,7 @@
       <workItem from="1718725701428" duration="3072000" />
       <workItem from="1718729630368" duration="2081000" />
       <workItem from="1718736632676" duration="3856000" />
-      <workItem from="1718805649422" duration="9062000" />
+      <workItem from="1718805649422" duration="11752000" />
     </task>
     <servers />
   </component>

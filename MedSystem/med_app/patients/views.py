@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import io
 import urllib, base64
 from django.core.paginator import Paginator
+from django.http import HttpRequest
 
 def main(request):
 
@@ -75,9 +76,10 @@ def change_pass(request):
     return render(request, "registration/change_pass.html", {"f":form})
 
 
-def patients(request):
-    patient = models.Patient.objects.all().values()
+def patients(request: HttpRequest):
+    patients = models.Patient.objects.all()
     form = forms.PatientSearchForm(request.GET)
+<<<<<<< HEAD
     mess = ''
     for p in patient:
         if not p['birthdate']:
@@ -115,12 +117,41 @@ def patients(request):
 
 
     paginator = Paginator(patient, 20)
+=======
+    mess = ""
+
+    if form.is_valid():
+        lastname = form.cleaned_data.get('lastname')
+        if lastname:
+            patients = patients.filter(lastname__icontains=lastname)
+        firstname = form.cleaned_data.get('firstname')
+        if firstname:
+            patients = patients.filter(firstname__icontains=firstname)
+        if not patients.exists():
+            patients = models.Patient.objects.all()
+            mess = "Don't find the patient"
+
+        items_per_page = form.cleaned_data.get('items_per_page') or 20
+    else:
+        items_per_page = 20
+
+    paginator = Paginator(patients, items_per_page)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        del query_params['page']
+>>>>>>> refs/remotes/origin/main
 
     return render(request, "all_patients.html", {
-        'patient': patient,
+        'patient': page_obj,
         'form': form,
-        'paginator': paginator.page(1),
         'mess': mess,
+<<<<<<< HEAD
+=======
+        'query_params': query_params.urlencode()
+>>>>>>> refs/remotes/origin/main
     })
 
 
