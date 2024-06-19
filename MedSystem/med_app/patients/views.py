@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import io
 import urllib, base64
 from django.core.paginator import Paginator
+from django.http import HttpRequest
 
 def main(request):
 
@@ -75,54 +76,39 @@ def change_pass(request):
     return render(request, "registration/change_pass.html", {"f":form})
 
 
-def patients(request):
-    patient = models.Patient.objects.all().values()
+def patients(request: HttpRequest):
+    patients = models.Patient.objects.all()
     form = forms.PatientSearchForm(request.GET)
     mess = ""
-    flag = False
-    for p in patient:
-        if not p['birthdate']:
-            age = 0
-        else:
-            patient_birth = int(p['birthdate'].strftime("%Y"))
-            today = datetime.datetime.today().year
-            age = today - patient_birth
-        p['age'] = age
-    patient_f = models.Patient.objects.all().values()
+
     if form.is_valid():
-        for p in patient_f:
-            if not p['birthdate']:
-                age = 0
-            else:
-                patient_birth = int(p['birthdate'].strftime("%Y"))
-                today = datetime.datetime.today().year
-                age = today - patient_birth
-            p['age'] = age
         lastname = form.cleaned_data.get('lastname')
         if lastname:
-            patient_f = patient.filter(lastname__icontains=lastname).values()
+            patients = patients.filter(lastname__icontains=lastname)
         firstname = form.cleaned_data.get('firstname')
         if firstname:
-            patient_f = patient.filter(firstname__icontains=firstname).values()
-        age = form.cleaned_data.get('age')
-        if age:
-            patient_f = patient.filter(birthdate__year = datetime.datetime.today().year -age).values()
-        if not patient_f:
-            patient_f = models.Patient.objects.all().values()
+            patients = patients.filter(firstname__icontains=firstname)
+        if not patients.exists():
+            patients = models.Patient.objects.all()
             mess = "Don't find the patient"
-        flag = True
-    paginator = Paginator(patient, 20)
-    paginator_f = Paginator(patient_f, 20)
+
+        items_per_page = form.cleaned_data.get('items_per_page') or 20
+    else:
+        items_per_page = 20
+
+    paginator = Paginator(patients, items_per_page)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        del query_params['page']
 
     return render(request, "all_patients.html", {
-        'patient': patient,
+        'patient': page_obj,
         'form': form,
-        'paginator': paginator.page(1),
         'mess': mess,
-        'patient_f': patient_f,
-        'paginator_f': paginator_f.page(1),
-        'age' : age,
-        'flag' : flag
+        'query_params': query_params.urlencode()
     })
 
 
