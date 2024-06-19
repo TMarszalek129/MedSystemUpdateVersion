@@ -7,8 +7,6 @@
     right: 10px;
 }
 
-
-
 {% endblock %}
 {% block title %}
   All patients
@@ -23,7 +21,6 @@
         {{ form.as_p }}
          <input type="submit" value="Filter">
         </form>
-        <p>{{ firstname }}</p>
         {% if mess %}
         <p style="color: red;">{{ mess }}</p>
         {% endif %}
@@ -36,6 +33,7 @@
     <th>ID</th>
     <th>Firstname</th>
     <th>Lastname</th>
+    <th>Age</th>
       <th>Details</th>
   </tr>
 
@@ -45,6 +43,12 @@
       <td>{{ x.id }}</td>
         <td>{{ x.firstname }}</td>
       <td>{{ x.lastname }}</td>
+        {% if x.age %}
+            <td>{{ x.age }}</td>
+        {% else %} 
+            <td>{{ age }}</td>
+        {% endif %}
+
     <td><a href=./details/{{x.id}}>INFO</a> </td>
     </tr>
     {% endif %}

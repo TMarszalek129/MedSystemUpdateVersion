@@ -79,6 +79,16 @@ def patients(request):
     patient = models.Patient.objects.all().values()
     form = forms.PatientSearchForm(request.GET)
     mess = ""
+
+    for p in patient:
+        if not p['birthdate']:
+            age = 0
+        else:
+            patient_birth = int(p['birthdate'].strftime("%Y"))
+            today = datetime.datetime.today().year
+            age = today - patient_birth
+        p['age'] = age
+
     if form.is_valid():
         lastname = form.cleaned_data.get('lastname')
         if lastname:
@@ -86,6 +96,9 @@ def patients(request):
         firstname = form.cleaned_data.get('firstname')
         if firstname:
             patient = patient.filter(firstname__icontains=firstname).values()
+        age = form.cleaned_data.get('age')
+        if age:
+            patient = patient.filter(birthdate__year = datetime.datetime.today().year -age).values()
         if not patient:
             patient = models.Patient.objects.all().values()
             mess = "Don't find the patient"
@@ -95,7 +108,8 @@ def patients(request):
         'patient': patient,
         'form': form,
         'paginator': paginator.page(1),
-        'mess': mess
+        'mess': mess,
+        'age' : age
     })
 
 
@@ -237,6 +251,7 @@ def exams(request, id):
     height = models.Measurement.objects.filter(patient_id=id, measure_id=2).order_by('-timestamp').values()
     pulse_values = models.Measurement.objects.filter(patient_id=id, measure_id=4).order_by('-timestamp').values()
     pressure_values = models.Measurement.objects.filter(patient_id=id, measure_id=3).order_by('-timestamp').values()
+
 
     bmi = 0
     entry = ''
