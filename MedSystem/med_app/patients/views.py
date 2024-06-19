@@ -78,8 +78,7 @@ def change_pass(request):
 def patients(request):
     patient = models.Patient.objects.all().values()
     form = forms.PatientSearchForm(request.GET)
-    mess = ""
-    flag = False
+    mess = ''
     for p in patient:
         if not p['birthdate']:
             age = 0
@@ -88,9 +87,23 @@ def patients(request):
             today = datetime.datetime.today().year
             age = today - patient_birth
         p['age'] = age
-    patient_f = models.Patient.objects.all().values()
+
     if form.is_valid():
-        for p in patient_f:
+
+        lastname = form.cleaned_data.get('lastname')
+        if lastname:
+            patient = patient.filter(lastname__icontains=lastname).values()
+        firstname = form.cleaned_data.get('firstname')
+        if firstname:
+            patient = patient.filter(firstname__icontains=firstname).values()
+        age = form.cleaned_data.get('age')
+        if age:
+            patient = patient.filter(birthdate__year = datetime.datetime.today().year -age).values()
+        if not patient:
+            patient = models.Patient.objects.all().values()
+            mess = "Don't find the patient"
+
+        for p in patient:
             if not p['birthdate']:
                 age = 0
             else:
@@ -98,31 +111,16 @@ def patients(request):
                 today = datetime.datetime.today().year
                 age = today - patient_birth
             p['age'] = age
-        lastname = form.cleaned_data.get('lastname')
-        if lastname:
-            patient_f = patient.filter(lastname__icontains=lastname).values()
-        firstname = form.cleaned_data.get('firstname')
-        if firstname:
-            patient_f = patient.filter(firstname__icontains=firstname).values()
-        age = form.cleaned_data.get('age')
-        if age:
-            patient_f = patient.filter(birthdate__year = datetime.datetime.today().year -age).values()
-        if not patient_f:
-            patient_f = models.Patient.objects.all().values()
-            mess = "Don't find the patient"
-        flag = True
+
+
+
     paginator = Paginator(patient, 20)
-    paginator_f = Paginator(patient_f, 20)
 
     return render(request, "all_patients.html", {
         'patient': patient,
         'form': form,
         'paginator': paginator.page(1),
         'mess': mess,
-        'patient_f': patient_f,
-        'paginator_f': paginator_f.page(1),
-        'age' : age,
-        'flag' : flag
     })
 
 
