@@ -175,5 +175,6 @@ class PatientSearchForm(forms.Form):
     firstname = forms.CharField(required=False)
     lastname = forms.CharField(required=False)
     age = forms.IntegerField(required=False)
-    items_per_page = forms.IntegerField(min_value=1, initial=20, required=False, label='Items per page')
+    items_per_page = forms.IntegerField(min_value=1, initial=20, required=False, label='Items per page', widget=forms.NumberInput(attrs={'style': 'width:200px'}))
+    go_to_page = forms.IntegerField(min_value=1, required=False, label='Go to this page', widget=forms.NumberInput(attrs={'style': 'width:200px'}))
 

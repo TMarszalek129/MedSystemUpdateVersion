@@ -5,8 +5,8 @@
     top: 10px;
     right: 10px;
 }
-.paginator {
-
+table {
+    width:30%;
 }
 {% endblock %}
 
@@ -74,10 +74,13 @@
     </span>
   </div>
 
-<form method="get" id="pagin">
+<form method="get">
     <div class="paginator">
+        {{ form.go_to_page.label_tag }} {{ form.go_to_page }}
+        <input type="submit" value="Go to this page">
         {{ form.items_per_page.label_tag }} {{ form.items_per_page }}
         <input type="submit" value="Number of patiens">
     </div>
 </form>
+
 {% endblock %}

@@ -76,7 +76,7 @@ def change_pass(request):
     return render(request, "registration/change_pass.html", {"f":form})
 
 
-def patients(request: HttpRequest):
+def patients(request):
     patients = models.Patient.objects.all().values()
     form = forms.PatientSearchForm(request.GET)
     mess = ""
@@ -106,6 +106,7 @@ def patients(request: HttpRequest):
             mess = "Don't find the patient"
 
         items_per_page = form.cleaned_data.get('items_per_page') or 20
+        go_to_page = form.cleaned_data.get('go_to_page') or 1
 
         for p in patients:
             if not p['birthdate']:
@@ -117,14 +118,22 @@ def patients(request: HttpRequest):
             p['age'] = age
     else:
         items_per_page = 20
+        go_to_page = None
 
     paginator = Paginator(patients, items_per_page + 1)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
     query_params = request.GET.copy()
+
+    if 'go_to_page' in query_params:
+        page_obj = paginator.get_page(go_to_page)
+        del query_params['go_to_page']
+
     if 'page' in query_params:
         del query_params['page']
+
+
 
     return render(request, "all_patients.html", {
         'patient': page_obj,
